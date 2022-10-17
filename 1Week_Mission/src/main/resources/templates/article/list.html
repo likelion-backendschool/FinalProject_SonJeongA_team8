@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html layout:decorate="~{layout/layout.html}">
 
 <head>
     <title>게시글 목록</title>
 </head>
 
 <body>
-<section>
-    <div class="container">
-        <h1>게시글 목록</h1>
+<main layout:fragment="main">
+    <section>
+        <div class="container">
+            <h1>게시글 목록</h1>
+            <ul>
+                <li th:each="article : ${articles}" class="flex gap-2 items-center">
+                    <a th:href="@{|/article/${article.id}|}" th:text="|번호 : ${article.id}|">
+                    </a>
 
-        <ul>
-            <li th:each="article : ${articles}" class="flex gap-2 items-center">
-                <a th:href="@{|/article/${article.id}|}" th:text="|번호 : ${article.id}|">
-                </a>
-
-                <a th:href="@{|/article/${article.id}|}" th:text="|제목 : ${article.title}|">
-                </a>
-            </li>
-        </ul>
-    </div>
-</section>
+                    <a th:href="@{|/article/${article.id}|}" th:text="|제목 : ${article.title}|">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </section>
+</main>
 </body>
 </html>

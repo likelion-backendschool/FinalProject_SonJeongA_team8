@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html layout:decorate="~{layout/layout.html}">
 
 <head>
     <title>글 상세페이지</title>
 </head>
 
 <body>
-<section>
-    <div class="container">
-        <h1>글 상세페이지</h1>
+<main layout:fragment="main">
+    <section>
+        <div class="container">
+            <h1>글 상세페이지</h1>
 
-        [[${article}]]
-    </div>
-</section>
+            [[${article}]]
+        </div>
+    </section>
+</main>
 </body>
 </html>

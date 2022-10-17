@@ -1,10 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html layout:decorate="~{layout/layout.html}">
+
 <head>
-    <meta charset="UTF-8">
     <title>메인</title>
 </head>
+
 <body>
-메인페이지 입니다.
+<main layout:fragment="main">
+    <section layout:fragment="content">
+        메인페이지 입니다.
+        <div class="container" sec:authorize="isAuthenticated()">
+            <div th:text="|${#authentication.principal.username}님 환영합니다.|"></div>
+        </div>
+
+    </section>
+</main>
 </body>
 </html>
