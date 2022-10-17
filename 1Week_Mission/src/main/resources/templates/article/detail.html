@@ -16,7 +16,7 @@
 
         <div class="grid grid-cols-2 mt-2 gap-2">
             <button type="button" th:onclick="|location.href='@{|/article/${article.id}/modify|}'|" class="btn btn-secondary btn-outline">수정</button>
-            <button type="button" onclick="" class="btn btn-secondary btn-outline">삭제</button>
+            <button type="button" th:onclick="|location.href='@{|/article/${article.id}/delete|}'|" class="btn btn-secondary btn-outline">삭제</button>
         </div>
     </section>
 </main>

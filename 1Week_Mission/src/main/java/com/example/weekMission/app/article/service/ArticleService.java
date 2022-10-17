@@ -50,4 +50,12 @@ public class ArticleService {
         article.setTitle(title);
         article.setContent(content);
     }
+
+    public void delete(Article article) {
+        articleRepository.delete(article);
+    }
+
+    public boolean authorCanDelete(Member author, Article article) {
+        return author.getId().equals(article.getAuthor().getId());
+    }
 }

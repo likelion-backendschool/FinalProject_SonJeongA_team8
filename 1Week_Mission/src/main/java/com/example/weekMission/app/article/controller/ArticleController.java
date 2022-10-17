@@ -1,6 +1,7 @@
 package com.example.weekMission.app.article.controller;
 
 import com.example.weekMission.app.article.entity.Article;
+import com.example.weekMission.app.article.exception.AuthorCanNotDeleteException;
 import com.example.weekMission.app.article.exception.AuthorCanNotModifyException;
 import com.example.weekMission.app.article.form.ArticleForm;
 import com.example.weekMission.app.article.service.ArticleService;
@@ -99,5 +100,20 @@ public class ArticleController {
 
         articleService.modify(article, articleForm.getTitle(), articleForm.getContent());
         return "redirect:/article/" + article.getId() + "?msg=" + Ut.url.encode("%d번 게시글이 생성되었습니다.".formatted(article.getId()));
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/delete")
+    public String delete(@AuthenticationPrincipal MemberContext memberContext, @PathVariable Long id) {
+        Article article = articleService.findById(id).get();
+
+        Member author = memberContext.getMember();
+
+        if (articleService.authorCanDelete(author, article) == false) {
+            throw new AuthorCanNotDeleteException();
+        }
+
+        articleService.delete(article);
+        return "redirect:/article/list" + "?msg=" + Ut.url.encode("%d번 게시글이 삭제되었습니다.".formatted(article.getId()));
     }
 }
