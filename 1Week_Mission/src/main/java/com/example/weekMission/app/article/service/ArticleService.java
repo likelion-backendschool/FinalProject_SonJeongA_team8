@@ -5,8 +5,10 @@ import com.example.weekMission.app.article.repository.ArticleRepository;
 import com.example.weekMission.app.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,5 +35,19 @@ public class ArticleService {
 
     public Article getArticleById(Long id) {
         return articleRepository.findById(id).orElse(null);
+    }
+
+    public Optional<Article> findById(long id) {
+        return articleRepository.findById(id);
+    }
+
+    public boolean authorCanModify(Member author, Article article) {
+        return author.getId().equals(article.getAuthor().getId());
+    }
+
+    @Transactional
+    public void modify(Article article, String title, String content) {
+        article.setTitle(title);
+        article.setContent(content);
     }
 }

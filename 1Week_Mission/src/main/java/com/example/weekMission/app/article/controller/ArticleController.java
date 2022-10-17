@@ -1,12 +1,15 @@
 package com.example.weekMission.app.article.controller;
 
 import com.example.weekMission.app.article.entity.Article;
+import com.example.weekMission.app.article.exception.AuthorCanNotModifyException;
 import com.example.weekMission.app.article.form.ArticleForm;
 import com.example.weekMission.app.article.service.ArticleService;
+import com.example.weekMission.app.member.entity.Member;
 import com.example.weekMission.app.security.dto.MemberContext;
 import com.example.weekMission.utill.Ut;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -66,5 +70,34 @@ public class ArticleController {
         model.addAttribute("article", article);
 
         return "article/detail";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/modify")
+    public String showModify(@AuthenticationPrincipal MemberContext memberContext, Model model, @PathVariable Long id) {
+        Article article = articleService.getArticleById(id);
+
+        if (memberContext.memberIsNot(article.getAuthor())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
+        model.addAttribute("article", article);
+
+        return "article/modify";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/{id}/modify")
+    public String modify(@AuthenticationPrincipal MemberContext memberContext, Model model, @PathVariable Long id, @Valid ArticleForm articleForm, BindingResult bindingResult) {
+        Article article = articleService.findById(id).get();
+
+        Member author = memberContext.getMember();
+
+        if (articleService.authorCanModify(author, article) == false) {
+            throw new AuthorCanNotModifyException();
+        }
+
+        articleService.modify(article, articleForm.getTitle(), articleForm.getContent());
+        return "redirect:/article/" + article.getId() + "?msg=" + Ut.url.encode("%d번 게시글이 생성되었습니다.".formatted(article.getId()));
     }
 }
