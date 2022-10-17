@@ -6,5 +6,25 @@
 </head>
 <body>
 글 작성페이지 입니다.
+
+<form action="/article/write" method="POST">
+    <div>
+        <div class="title">
+            제목
+            <input type="text" name="title" />
+        </div>
+    </div>
+    <div>
+        <div class="content">
+            내용
+            <textarea name="content"></textarea>
+        </div>
+    </div>
+    <div>
+        <span>글쓰기</span>
+        <input type="submit" value="작성" />
+    </div>
+</form>
+
 </body>
 </html>
