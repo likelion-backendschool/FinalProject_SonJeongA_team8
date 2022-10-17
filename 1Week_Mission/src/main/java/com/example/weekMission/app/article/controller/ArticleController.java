@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/article")
 public class ArticleController {
 
+    @GetMapping("/list")
+    public String showList() {
+        return "article/list";
+    }
+
     @GetMapping("/write")
     public String showWrite() {
         return "article/write";
@@ -16,6 +21,6 @@ public class ArticleController {
 
     @PostMapping("/write")
     public String write() {
-        return "redirect:/";
+        return "article/list";
     }
 }

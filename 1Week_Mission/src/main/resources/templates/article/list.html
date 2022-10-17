@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html layout:decorate="~{layout/layout.html}">
+
 <head>
-    <meta charset="UTF-8">
     <title>글 목록</title>
 </head>
-<body>
 
+<body>
+<section layout:fragment="content">
+    <div class="container">
+        <h1>글 목록</h1>
+
+        <ul>
+            <li th:each="article : ${articles}" class="flex gap-2 items-center">
+                <a th:href="@{|/article/${article.id}|}" th:text="|번호 : ${article.id}|">
+                </a>
+
+                <a th:href="@{|/article/${article.id}|}" th:text="|제목 : ${article.title}|">
+                </a>
+            </li>
+        </ul>
+    </div>
+</section>
 </body>
 </html>
