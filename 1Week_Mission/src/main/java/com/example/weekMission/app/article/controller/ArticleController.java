@@ -2,6 +2,7 @@ package com.example.weekMission.app.article.controller;
 
 import com.example.weekMission.app.article.entity.Article;
 import com.example.weekMission.app.article.service.ArticleService;
+import com.example.weekMission.app.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,8 +32,8 @@ public class ArticleController {
     }
 
     @PostMapping("/write")
-    public String write(Article article) {
-        articleService.save(article);
+    public String write(String title, String content) {
+        articleService.write(title, content);
         return "redirect:/article/list";
     }
 }

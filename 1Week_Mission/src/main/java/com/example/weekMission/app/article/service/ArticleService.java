@@ -17,7 +17,13 @@ public class ArticleService {
         return articleRepository.findAll();
     }
 
-    public void save(Article article) {
+    public Article write(String title, String content) {
+        Article article = Article.builder()
+                .title(title)
+                .content(content)
+                .build();
         articleRepository.save(article);
+
+        return article;
     }
 }
