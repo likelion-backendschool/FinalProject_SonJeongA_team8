@@ -1,4 +1,4 @@
-package com.example.eBook;
+package com.example.weekMission;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
