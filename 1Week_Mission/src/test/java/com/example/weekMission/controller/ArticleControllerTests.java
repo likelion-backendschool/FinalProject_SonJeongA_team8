@@ -42,6 +42,4 @@ public class ArticleControllerTests {
                 .andExpect(handler().methodName("showWrite"))
                 .andExpect(content().string(containsString("게시글 작성")));
     }
-
-
 }

@@ -25,9 +25,10 @@ public class ArticleServiceTests {
     @DisplayName("게시글 업로드")
     void t1() {
 
-        Article article = articleService.write("제목", "내용");
+        Article article = articleService.write(3L, "제목", "내용");
 
         assertThat(article).isNotNull();
+        assertThat(article.getId()).isEqualTo(3L);
         assertThat(article.getTitle()).isEqualTo("제목");
         assertThat(article.getContent()).isEqualTo("내용");
     }
