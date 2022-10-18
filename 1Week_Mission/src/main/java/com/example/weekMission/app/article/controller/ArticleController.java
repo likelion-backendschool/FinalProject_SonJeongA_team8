@@ -27,7 +27,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/article")
+@RequestMapping("/post")
 @Slf4j
 public class ArticleController {
 
@@ -58,10 +58,10 @@ public class ArticleController {
 
         log.debug("article : " + article);
 
-        String msg = "%d번 게시물이 작성되었습니다.".formatted(article.getId());
+        String msg = "%d번 글이 작성되었습니다.".formatted(article.getId());
         msg = Ut.url.encode(msg);
 
-        return "redirect:/article/%d?msg=%s".formatted(article.getId(), msg);
+        return "redirect:/post/%d?msg=%s".formatted(article.getId(), msg);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -99,7 +99,7 @@ public class ArticleController {
         }
 
         articleService.modify(article, articleForm.getTitle(), articleForm.getContent());
-        return "redirect:/article/" + article.getId() + "?msg=" + Ut.url.encode("%d번 게시글이 생성되었습니다.".formatted(article.getId()));
+        return "redirect:/post/" + article.getId() + "?msg=" + Ut.url.encode("%d번 글이 수정되었습니다.".formatted(article.getId()));
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -114,6 +114,6 @@ public class ArticleController {
         }
 
         articleService.delete(article);
-        return "redirect:/article/list" + "?msg=" + Ut.url.encode("%d번 게시글이 삭제되었습니다.".formatted(article.getId()));
+        return "redirect:/post/list" + "?msg=" + Ut.url.encode("%d번 글이 삭제되었습니다.".formatted(article.getId()));
     }
 }

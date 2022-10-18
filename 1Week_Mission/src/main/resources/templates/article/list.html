@@ -2,25 +2,25 @@
 <html layout:decorate="~{layout/layout.html}">
 
 <head>
-    <title>게시글 목록</title>
+    <title>글 리스트</title>
 </head>
 
 <body>
 <main layout:fragment="main">
     <section>
         <div class="container">
-            <h1>게시글 목록</h1>
+            <h1>글 리스트</h1>
             <ul>
                 <li th:each="article : ${articles}" class="flex gap-2 items-center">
-                    <a th:href="@{|/article/${article.id}|}" th:text="|번호 : ${article.id}|">
+                    <a th:href="@{|/post/${article.id}|}" th:text="|번호 : ${article.id}|">
                     </a>
 
-                    <a th:href="@{|/article/${article.id}|}" th:text="|제목 : ${article.title}|">
+                    <a th:href="@{|/post/${article.id}|}" th:text="|제목 : ${article.title}|">
                     </a>
                 </li>
             </ul>
         </div>
-        <button type="button" th:onclick="|location.href='@{/article/write}'|" class="btn btn-secondary btn-outline">게시글 작성</button>
+        <button type="button" th:onclick="|location.href='@{/post/write}'|" class="btn btn-secondary btn-outline">글 작성</button>
     </section>
 </main>
 </body>
