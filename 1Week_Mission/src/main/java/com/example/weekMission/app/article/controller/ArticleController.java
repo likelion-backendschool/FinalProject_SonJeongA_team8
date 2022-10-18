@@ -2,7 +2,6 @@ package com.example.weekMission.app.article.controller;
 
 import com.example.weekMission.app.article.entity.Article;
 import com.example.weekMission.app.article.exception.AuthorCanNotDeleteException;
-import com.example.weekMission.app.article.exception.AuthorCanNotModifyException;
 import com.example.weekMission.app.article.form.ArticleForm;
 import com.example.weekMission.app.article.service.ArticleService;
 import com.example.weekMission.app.member.entity.Member;

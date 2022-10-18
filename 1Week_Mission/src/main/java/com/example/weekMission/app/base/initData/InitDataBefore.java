@@ -8,8 +8,8 @@ import com.example.weekMission.app.member.service.MemberService;
 public interface InitDataBefore {
     default void before(MemberService memberService, ArticleService articleService) {
 
-        Member member1 = memberService.join("user1", "1234", "user1@test.com");
-        Member member2 = memberService.join("user2", "1234", "user2@test.com");
+        Member member1 = memberService.join("user1", "1234", "user1@test.com", "p1");
+        Member member2 = memberService.join("user2", "1234", "user2@test.com", "p2");
 
         Article article1 = articleService.write(1L, "제목1", "내용1", "#자바 #개발 #프로그래밍");
         Article article2 = articleService.write(1L, "제목2", "내용2", "#파이썬 #개발 #프로그래밍");

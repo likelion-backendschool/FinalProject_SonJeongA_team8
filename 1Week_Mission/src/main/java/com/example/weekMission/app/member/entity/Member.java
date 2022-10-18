@@ -25,11 +25,17 @@ public class Member extends BaseEntity {
 
     private String email;
 
+    private String nickname;
+
     public Member(long id) {
         super(id);
     }
 
     public String getName() {
         return username;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 }

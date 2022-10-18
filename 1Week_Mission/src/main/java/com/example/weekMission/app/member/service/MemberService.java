@@ -12,11 +12,12 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Member join(String username, String password, String email) {
+    public Member join(String username, String password, String email, String nickname) {
         Member member = Member.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
                 .email(email)
+                .nickname(nickname)
                 .build();
 
         memberRepository.save(member);
