@@ -11,7 +11,12 @@
         <div class="container">
             <h1>글 상세정보</h1>
 
-            [[${article}]]
+            <div th:text="|번호 : ${article.id}|"></div>
+            <div th:text="|제목 : ${article.title}|"></div>
+            <div th:text="|작성자 : ${article.author.username}|"></div>
+            <div th:text="|작성날짜 : ${article.createDate}|"></div>
+            <div th:text="|수정날짜 : ${article.modifyDate}|"></div>
+            <div th:text="|내용 : ${article.content}|"></div>
         </div>
 
         <div class="grid grid-cols-2 mt-2 gap-2">
