@@ -20,10 +20,6 @@
                         return;
                     }
 
-                    if (ArticleWrite__submitDone) {
-                        return;
-                    }
-
                     form.subject.value = form.subject.value.trim();
 
                     if (form.subject.value.length == 0) {
@@ -33,7 +29,11 @@
                         return;
                     }
 
-                    form.content.value = form.content.value.trim();
+                    const editor = $(form).find(".toast-ui-editor").data("data-toast-editor");
+
+                    const markdown = editor.getMarkdown();
+                    console.log(markdown);
+                    form.content.value = markdown.trim();
 
                     if (form.content.value.length == 0) {
                         warningModal("내용을 입력해주세요.");
@@ -50,6 +50,7 @@
 
             <form th:action method="POST" class="flex flex-col gap-3"
                   onsubmit="ArticleModify__submit(this); return false;">
+                <input type="hidden" name="content" />
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text">제목</span>
@@ -62,8 +63,10 @@
                     <label class="label">
                         <span class="label-text">내용</span>
                     </label>
-                    <textarea name="content" placeholder="#내용" class="textarea textarea-bordered min-h-[500px] h-[calc(100vh-400px)]"
-                              maxlength="10000" th:utext="${article.content}"></textarea>
+
+                    <div class="toast-ui-editor" toast-ui-editor--height="700px">
+                        <script type="text/x-template">[[${article.content}]]</script>
+                    </div>
                 </div>
 
                 <div class="form-control">
