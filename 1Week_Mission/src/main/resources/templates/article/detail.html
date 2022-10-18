@@ -21,7 +21,7 @@
 
         <div class="grid grid-cols-2 mt-2 gap-2">
             <button type="button" th:onclick="|location.href='@{|/post/${article.id}/modify|}'|" class="btn btn-secondary btn-outline">수정</button>
-            <button type="button" th:onclick="|location.href='@{|/post/${article.id}/delete|}'|" class="btn btn-secondary btn-outline">삭제</button>
+            <a onclick="return confirm('정말로 삭제하시겠습니까?')" th:href="@{|/post/${article.id}/delete|}" class="btn btn-secondary btn-outline">삭제</a>
         </div>
     </section>
 </main>
