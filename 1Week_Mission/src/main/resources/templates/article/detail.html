@@ -17,6 +17,10 @@
             <div th:text="|작성날짜 : ${article.createDate}|"></div>
             <div th:text="|수정날짜 : ${article.modifyDate}|"></div>
             <div th:text="|내용 : ${article.content}|"></div>
+            <div>
+                해시태그 :
+                <th:block th:utext="${article.extra_hashTagLinks}" />
+            </div>
         </div>
 
         <div class="grid grid-cols-2 mt-2 gap-2">
