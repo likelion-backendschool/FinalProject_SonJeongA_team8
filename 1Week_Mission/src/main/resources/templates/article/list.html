@@ -26,6 +26,8 @@
 
                     <a th:href="@{|/post/${article.id}|}" th:text="|내용 : ${article.content}|">
                     </a>
+
+                    <th:block th:utext="|태그 : ${article.extra_hashTagLinks}|" />
                 </li>
             </ul>
         </div>
