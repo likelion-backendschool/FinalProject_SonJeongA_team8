@@ -54,7 +54,7 @@ public class ArticleController {
             return "article/write";
         }
 
-        Article article = articleService.write(memberContext.getId(), articleForm.getTitle(), articleForm.getContent());
+        Article article = articleService.write(memberContext.getId(), articleForm.getSubject(), articleForm.getContent());
 
         log.debug("article : " + article);
 
@@ -98,7 +98,7 @@ public class ArticleController {
             throw new AuthorCanNotModifyException();
         }
 
-        articleService.modify(article, articleForm.getTitle(), articleForm.getContent());
+        articleService.modify(article, articleForm.getSubject(), articleForm.getContent());
         return "redirect:/post/" + article.getId() + "?msg=" + Ut.url.encode("%d번 글이 수정되었습니다.".formatted(article.getId()));
     }
 

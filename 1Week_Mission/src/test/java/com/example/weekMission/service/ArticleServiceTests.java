@@ -29,7 +29,7 @@ public class ArticleServiceTests {
 
         assertThat(article).isNotNull();
         assertThat(article.getId()).isEqualTo(3L);
-        assertThat(article.getTitle()).isEqualTo("제목");
+        assertThat(article.getSubject()).isEqualTo("제목");
         assertThat(article.getContent()).isEqualTo("내용");
     }
 }

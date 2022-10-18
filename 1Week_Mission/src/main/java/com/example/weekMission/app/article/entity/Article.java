@@ -20,7 +20,7 @@ public class Article extends BaseEntity {
     @ManyToOne
     private Member author;
 
-    private String title;
+    private String subject;
 
     private String content;
 }

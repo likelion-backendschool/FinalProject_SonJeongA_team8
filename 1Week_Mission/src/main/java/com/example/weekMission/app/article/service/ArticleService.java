@@ -20,11 +20,11 @@ public class ArticleService {
         return articleRepository.findAll();
     }
 
-    public Article write(Long authorId, String title, String content) {
+    public Article write(Long authorId, String subject, String content) {
         Article article = Article
                 .builder()
                 .author(new Member(authorId))
-                .title(title)
+                .subject(subject)
                 .content(content)
                 .build();
 
@@ -46,8 +46,8 @@ public class ArticleService {
     }
 
     @Transactional
-    public void modify(Article article, String title, String content) {
-        article.setTitle(title);
+    public void modify(Article article, String subject, String content) {
+        article.setSubject(subject);
         article.setContent(content);
     }
 

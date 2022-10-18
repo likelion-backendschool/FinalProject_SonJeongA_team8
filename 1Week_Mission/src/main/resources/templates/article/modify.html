@@ -26,7 +26,7 @@
 
                     form.subject.value = form.subject.value.trim();
 
-                    if (form.title.value.length == 0) {
+                    if (form.subject.value.length == 0) {
                         warningModal("제목을 입력해주세요.");
                         form.subject.focus();
 
@@ -54,8 +54,8 @@
                     <label class="label">
                         <span class="label-text">제목</span>
                     </label>
-                    <input autofocus type="text" name="title" placeholder="제목" class="input input-bordered"
-                           maxlength="50" th:value="${article.title}">
+                    <input autofocus type="text" name="subject" placeholder="제목" class="input input-bordered"
+                           maxlength="50" th:value="${article.subject}">
                 </div>
 
                 <div class="form-control">

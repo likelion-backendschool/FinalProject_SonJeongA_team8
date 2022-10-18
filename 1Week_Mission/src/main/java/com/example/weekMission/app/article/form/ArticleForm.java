@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 @Getter
 public class ArticleForm {
     @NotEmpty
-    private String title;
+    private String subject;
 
     @NotEmpty
     private String content;
