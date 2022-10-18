@@ -12,11 +12,22 @@
             <h1>글 상세정보</h1>
 
             <div th:text="|번호 : ${article.id}|"></div>
+
             <div th:text="|제목 : ${article.subject}|"></div>
+
             <div th:text="|작성자 : ${article.author.username}|"></div>
+
             <div th:text="|작성날짜 : ${article.createDate}|"></div>
+
             <div th:text="|수정날짜 : ${article.modifyDate}|"></div>
-            <div th:text="|내용 : ${article.content}|"></div>
+
+            <div> 내용 : </div>
+            <div class="toast-ui-viewer">
+                <script type="text/x-template">
+                    [[${article.content}]]
+                </script>
+            </div>
+
             <div>
                 해시태그 :
                 <th:block th:utext="${article.extra_hashTagLinks}" />
