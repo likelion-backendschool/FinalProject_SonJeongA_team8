@@ -17,6 +17,15 @@
 
                     <a th:href="@{|/post/${article.id}|}" th:text="|제목 : ${article.title}|">
                     </a>
+
+                    <a th:href="@{|/post/${article.id}|}" th:text="|작성자 : ${article.author.username}|">
+                    </a>
+
+                    <a th:href="@{|/post/${article.id}|}" th:text="|수정날짜 : ${article.modifyDate}|">
+                    </a>
+
+                    <a th:href="@{|/post/${article.id}|}" th:text="|내용 : ${article.content}|">
+                    </a>
                 </li>
             </ul>
         </div>
