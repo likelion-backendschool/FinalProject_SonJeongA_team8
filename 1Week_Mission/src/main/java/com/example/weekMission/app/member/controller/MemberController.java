@@ -110,4 +110,10 @@ public class MemberController {
         return "redirect:/member/findUsername?msg=" + Ut.url.encode("아이디 : " + memberUsername);
     }
 
+    @PreAuthorize("isAnonymous()")
+    @GetMapping("/findPassword")
+    public String showFindPassword() {
+        return "member/findPassword";
+    }
+
 }
