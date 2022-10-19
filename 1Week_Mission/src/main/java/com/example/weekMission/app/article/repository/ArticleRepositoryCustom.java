@@ -9,4 +9,6 @@ public interface ArticleRepositoryCustom {
     List<Article> getQslArticlesOrderByIdDesc();
 
     List<Article> getTop100ArticlesByOrderByModifyDateDesc();
+
+    List<Article> searchQsl(String kwType, String kw);
 }

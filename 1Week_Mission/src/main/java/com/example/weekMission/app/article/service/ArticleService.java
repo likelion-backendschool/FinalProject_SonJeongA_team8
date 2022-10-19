@@ -119,4 +119,8 @@ public class ArticleService {
     public List<Article> getRecentArticles() {
         return articleRepository.getTop100ArticlesByOrderByModifyDateDesc();
     }
+
+    public List<Article> search(String kwType, String kw) {
+        return articleRepository.searchQsl(kwType, kw);
+    }
 }

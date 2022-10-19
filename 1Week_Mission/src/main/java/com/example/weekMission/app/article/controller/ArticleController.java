@@ -15,10 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
@@ -33,7 +30,16 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @GetMapping("/list")
-    public String showList(Model model) {
+    public String showList(Model model, @RequestParam(required = false) String kwType, @RequestParam(required = false) String kw) {
+
+        if (kw!=null) {
+            List<Article> articles = articleService.search(kwType, kw);
+            model.addAttribute("articles", articles);
+
+            return "article/list";
+        }
+
+
         List<Article> articles = articleService.getArticles();
 
         articleService.loadForPrintData(articles);
