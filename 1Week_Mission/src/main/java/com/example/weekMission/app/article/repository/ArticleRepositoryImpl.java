@@ -21,4 +21,14 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
                 .orderBy(article.id.desc())
                 .fetch();
     }
+
+    @Override
+    public List<Article> getTop100ArticlesByOrderByModifyDateDesc() {
+        return jpaQueryFactory
+                .select(article)
+                .from(article)
+                .orderBy(article.modifyDate.desc())
+                .limit(100)
+                .fetch();
+    }
 }

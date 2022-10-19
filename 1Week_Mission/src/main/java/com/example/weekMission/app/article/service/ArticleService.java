@@ -115,4 +115,8 @@ public class ArticleService {
             article.getExtra().put("hashTags", hashTags);
         });
     }
+
+    public List<Article> getRecentArticles() {
+        return articleRepository.getTop100ArticlesByOrderByModifyDateDesc();
+    }
 }

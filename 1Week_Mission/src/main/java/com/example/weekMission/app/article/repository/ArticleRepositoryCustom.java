@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ArticleRepositoryCustom {
     List<Article> getQslArticlesOrderByIdDesc();
+
+    List<Article> getTop100ArticlesByOrderByModifyDateDesc();
 }
