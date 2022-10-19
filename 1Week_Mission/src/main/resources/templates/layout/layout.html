@@ -110,10 +110,10 @@
             </a>
 
             <form name="logoutForm" th:action="@{/member/logout}" method="post" hidden></form>
-            <a href="/member/profile" class="inline-flex" sec:authorize="isAuthenticated()">
+            <a href="/member/modify" class="inline-flex" sec:authorize="isAuthenticated()">
                 <i class="fa-solid fa-user"></i>
                 <span class="ml-[2px] hidden sm:block">
-                    프로파일
+                    회원정보
                 </span>
             </a>
 

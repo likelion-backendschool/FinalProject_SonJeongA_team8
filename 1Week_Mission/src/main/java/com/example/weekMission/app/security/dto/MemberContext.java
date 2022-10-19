@@ -22,6 +22,8 @@ public class MemberContext extends User {
 
     private final String email;
 
+    private final String nickname;
+
     public MemberContext(Member member, List<GrantedAuthority> authorities) {
         super(member.getUsername(), member.getPassword(), authorities);
 
@@ -34,6 +36,8 @@ public class MemberContext extends User {
         this.username = member.getUsername();
 
         this.email = member.getEmail();
+
+        this.nickname = member.getNickname();
     }
 
     public Member getMember() {
@@ -44,6 +48,7 @@ public class MemberContext extends User {
                 .modifyDate(modifyDate)
                 .username(username)
                 .email(email)
+                .nickname(nickname)
                 .build();
     }
 

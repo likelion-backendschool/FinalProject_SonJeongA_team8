@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}">
+
+<head>
+    <title>회원정보 수정</title>
+</head>
+
+<body>
+<main layout:fragment="main">
+    <section class="section section-join flex-grow flex flex-col items-center justify-center">
+
+        <div class="max-w-md w-full px-2 pt-4">
+            <h1 class="font-bold text-lg">회원정보 수정</h1>
+            <script>
+                function memberModifyForm__submit(form) {
+                    form.nickname.value = form.nickname.value.trim();
+
+                    if (form.nickname.value.length == 0) {
+                        warningModal("닉네임 입력해주세요.");
+                        form.nickname.focus();
+
+                        return;
+                    }
+
+                    form.email.value = form.email.value.trim();
+
+                    if (form.email.value.length == 0) {
+                        warningModal("이메일을 입력해주세요.");
+                        form.email.focus();
+
+                        return;
+                    }
+
+                    form.submit();
+                }
+
+            </script>
+
+
+            <form th:action method="POST" onsubmit="memberModifyForm__submit(this); return false;">
+                <div>
+                    <span>아이디</span>
+                    <span th:text="${#authentication.principal.username}"></span>
+                </div>
+                <div>
+                    <span>이메일</span>
+                    <input type="text" name="email" th:value="${#authentication.principal.email}">
+                </div>
+                <div>
+                    <span>닉네임</span>
+                    <input type="text" name="nickname" th:value="${#authentication.principal.nickname}">
+                </div>
+
+                <div>
+                    <input class="btn btn-primary" type="submit" value="수정">
+                    <button type="button" th:onclick="|location.href='@{|/post/member/modify|}'|" class="btn btn-secondary btn-outline">비밀번호 변경</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+</main>
+</body>
+</html>
