@@ -31,6 +31,12 @@ public class MemberService {
 
         memberRepository.save(member);
 
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(email);
+        simpleMailMessage.setSubject("\"" + username + "\" 님의 e-book 가입 축하 이메일입니다.");
+        simpleMailMessage.setText("안녕하세요. " +"\"" + username +"\"님의 " + "e-book 가입을 축하드립니다!");
+        javaMailSender.send(simpleMailMessage);
+
         return member;
     }
 
