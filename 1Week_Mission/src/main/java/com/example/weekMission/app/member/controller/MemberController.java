@@ -29,7 +29,7 @@ public class MemberController {
     @GetMapping("/login")
     public String showLogin(HttpServletRequest request) {
         String uri = request.getHeader("Referer");
-        if (uri != null && !uri.contains("/member/login")) {
+        if (uri != null && !uri.contains("/member/login")&&!uri.contains("/member/findPassword")) {
             request.getSession().setAttribute("prevPage", uri);
         }
 
@@ -116,4 +116,16 @@ public class MemberController {
         return "member/findPassword";
     }
 
+    @PreAuthorize("isAnonymous()")
+    @PostMapping("/findPassword")
+    public String findPassword(String username, String email) {
+
+        Member member = memberService.enrolledUsernameAndEmail(username, email);
+
+        if (member == null) {
+            return "redirect:/member/findPassword?errorMsg=" + Ut.url.encode("일치하지 않는 정보입니다.");
+        }
+
+        return "redirect:/member/findPassword?msg=" + Ut.url.encode("임시비밀번호가 이메일로 발송되었습니다.");
+    }
 }

@@ -3,7 +3,10 @@ package com.example.weekMission.app.member.service;
 import com.example.weekMission.app.member.entity.Member;
 import com.example.weekMission.app.member.repository.MemberRepository;
 import com.example.weekMission.app.security.dto.MemberContext;
+import com.example.weekMission.utill.Ut;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,11 @@ import org.springframework.stereotype.Service;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender javaMailSender;
+
+    private static final String title = "e-book 임시 비밀번호 안내 이메일입니다.";
+    private static final String message = "안녕하세요. e-book 임시 비밀번호 안내 메일입니다. "
+            +"\n" + "회원님의 임시 비밀번호는 아래와 같습니다. 로그인 후 반드시 비밀번호를 변경해주세요."+"\n";
 
     public Member join(String username, String password, String email, String nickname) {
         Member member = Member.builder()
@@ -62,5 +70,28 @@ public class MemberService {
         }
 
         return member.getUsername();
+    }
+
+    public Member enrolledUsernameAndEmail(String username, String email) {
+        Member memberUsername = memberRepository.findByUsername(username).orElse(null);
+
+        Member memberEmail = memberRepository.findByEmail(email).orElse(null);
+
+        if(memberUsername==null || memberEmail==null || !(memberUsername.equals(memberEmail))) {
+            return null;
+        }
+
+        String randomPassword = Ut.randomPassword();
+
+        memberEmail.setPassword(passwordEncoder.encode(randomPassword));
+        memberRepository.save(memberEmail);
+
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(memberEmail.getEmail());
+        simpleMailMessage.setSubject(title);
+        simpleMailMessage.setText(message + randomPassword);
+        javaMailSender.send(simpleMailMessage);
+
+        return memberUsername;
     }
 }

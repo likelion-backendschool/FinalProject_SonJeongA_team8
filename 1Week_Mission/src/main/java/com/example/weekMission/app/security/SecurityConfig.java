@@ -27,6 +27,7 @@ public class SecurityConfig {
                         formLogin -> formLogin
                                 .loginPage("/member/login") // GET
                                 .loginProcessingUrl("/member/login") // POST
+                                .defaultSuccessUrl("/")
                                 .successHandler(authenticationSuccessHandler)
                                 .failureHandler(authenticationFailureHandler)
                 )

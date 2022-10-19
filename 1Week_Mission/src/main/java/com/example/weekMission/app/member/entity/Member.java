@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
+@EqualsAndHashCode
 @ToString(callSuper = true)
 public class Member extends BaseEntity {
 
