@@ -120,7 +120,7 @@ public class ArticleController {
             throw new AuthorCanNotDeleteException();
         }
 
-        articleService.delete(article);
+        articleService.delete(id);
         return "redirect:/post/list" + "?msg=" + Ut.url.encode("%d번 글이 삭제되었습니다.".formatted(article.getId()));
     }
 }

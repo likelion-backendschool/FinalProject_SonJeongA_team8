@@ -72,7 +72,10 @@ public class ArticleService {
         hashTagService.applyHashTags(article, hashTagContents);
     }
 
-    public void delete(Article article) {
+    public void delete(Long id) {
+        Article article = articleRepository.findById(id).orElse(null);
+        List<HashTag> hashTags = hashTagService.getHashTags(article);
+        hashTagService.deleteHashTag(hashTags);
         articleRepository.delete(article);
     }
 
