@@ -40,4 +40,17 @@ public class MemberService {
         memberContext.setEmail(member.getEmail());
         memberContext.setNickname(member.getNickname());
     }
+
+    public boolean checkPassword(Member member, String oldPassword) {
+        if(passwordEncoder.matches(oldPassword, member.getPassword())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void modifyPassword(Member member, String password) {
+        member.setPassword((passwordEncoder.encode(password)));
+        memberRepository.save(member);
+    }
 }

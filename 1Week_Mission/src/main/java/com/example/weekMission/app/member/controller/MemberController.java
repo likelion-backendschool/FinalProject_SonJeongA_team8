@@ -77,4 +77,19 @@ public class MemberController {
         return "member/modifyPassword";
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modifyPassword")
+    public String modifyPassword(@AuthenticationPrincipal MemberContext memberContext, String oldPassword, String password) {
+
+        Member member = memberService.getMemberById(memberContext.getId());
+
+        if(!memberService.checkPassword(member, oldPassword)) {
+            return "redirect:/member/modifyPassword?errorMsg=" + Ut.url.encode("현재 비밀번호가 일치하지 않습니다.");
+        }
+
+        memberService.modifyPassword(member, password);
+
+        return "redirect:/member/modifyPassword?msg=" + Ut.url.encode("비밀번호 변경이 완료되었습니다.");
+    }
+
 }
