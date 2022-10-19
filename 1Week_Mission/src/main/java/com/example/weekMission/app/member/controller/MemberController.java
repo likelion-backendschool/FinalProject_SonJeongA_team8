@@ -1,10 +1,16 @@
 package com.example.weekMission.app.member.controller;
 
+import com.example.weekMission.app.member.entity.Member;
 import com.example.weekMission.app.member.form.JoinForm;
 import com.example.weekMission.app.member.service.MemberService;
+import com.example.weekMission.app.security.dto.MemberContext;
 import com.example.weekMission.utill.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,5 +54,20 @@ public class MemberController {
     @GetMapping("/modify")
     public String showModify() {
         return "member/modify";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modify")
+    public String modify(@AuthenticationPrincipal MemberContext memberContext, String email, String nickname) {
+
+        Member member = memberService.getMemberById(memberContext.getId());
+
+        memberService.modify(memberContext, member, email, nickname);
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(memberContext, member.getPassword(), memberContext.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return "redirect:/member/modify?msg=" + Ut.url.encode("회원정보 수정이 완료되었습니다.");
     }
 }

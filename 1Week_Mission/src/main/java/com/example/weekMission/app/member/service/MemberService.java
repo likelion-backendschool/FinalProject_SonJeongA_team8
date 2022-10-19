@@ -2,6 +2,7 @@ package com.example.weekMission.app.member.service;
 
 import com.example.weekMission.app.member.entity.Member;
 import com.example.weekMission.app.member.repository.MemberRepository;
+import com.example.weekMission.app.security.dto.MemberContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,5 +24,20 @@ public class MemberService {
         memberRepository.save(member);
 
         return member;
+    }
+
+    public Member getMemberById(Long loginedMemberId) {
+        Member member = memberRepository.findById(loginedMemberId).orElse(null);
+        return member;
+    }
+
+    public void modify(MemberContext memberContext, Member member, String email, String nickname) {
+        member.setEmail(email);
+        member.setNickname(nickname);
+        memberRepository.save(member);
+
+        memberContext.setModifyDate(member.getModifyDate());
+        memberContext.setEmail(member.getEmail());
+        memberContext.setNickname(member.getNickname());
     }
 }

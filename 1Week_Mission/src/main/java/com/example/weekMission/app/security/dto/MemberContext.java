@@ -2,6 +2,7 @@ package com.example.weekMission.app.security.dto;
 
 import com.example.weekMission.app.member.entity.Member;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -10,19 +11,20 @@ import java.util.List;
 
 
 @Getter
+@Setter
 public class MemberContext extends User {
 
-    private final Long id;
+    private Long id;
 
-    private final LocalDateTime createDate;
+    private LocalDateTime createDate;
 
-    private final LocalDateTime modifyDate;
+    private LocalDateTime modifyDate;
 
-    private final String username;
+    private String username;
 
-    private final String email;
+    private String email;
 
-    private final String nickname;
+    private String nickname;
 
     public MemberContext(Member member, List<GrantedAuthority> authorities) {
         super(member.getUsername(), member.getPassword(), authorities);
@@ -63,4 +65,5 @@ public class MemberContext extends User {
     public boolean memberIsNot(Member member) {
         return memberIs(member) == false;
     }
+
 }
