@@ -92,4 +92,10 @@ public class MemberController {
         return "redirect:/member/modifyPassword?msg=" + Ut.url.encode("비밀번호 변경이 완료되었습니다.");
     }
 
+    @PreAuthorize("isAnonymous()")
+    @GetMapping("/findUsername")
+    public String showFindUsername() {
+        return "member/findUsername";
+    }
+
 }

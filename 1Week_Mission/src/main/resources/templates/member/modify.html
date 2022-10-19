@@ -38,20 +38,29 @@
 
 
             <form th:action method="POST" onsubmit="memberModifyForm__submit(this); return false;">
-                <div>
-                    <span>아이디</span>
-                    <span th:text="${#authentication.principal.username}"></span>
-                </div>
-                <div>
-                    <span>이메일</span>
-                    <input type="text" name="email" th:value="${#authentication.principal.email}">
-                </div>
-                <div>
-                    <span>닉네임</span>
-                    <input type="text" name="nickname" th:value="${#authentication.principal.nickname}">
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">아이디</span>
+                    </label>
+                    <input th:value="${#authentication.principal.username}" class="input input-bordered" maxlength="50" readonly/>
                 </div>
 
-                <div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">이메일</span>
+                    </label>
+                    <input type="email" id="email" name="email" th:value="${#authentication.principal.email}" class="input input-bordered" maxlength="50">
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">닉네임</span>
+                    </label>
+                    <input type="text" id="nickname" name="nickname" th:value="${#authentication.principal.nickname}" class="input input-bordered" maxlength="50">
+                </div>
+
+                <div class="grid grid-cols-2 mt-2 gap-2">
                     <input class="btn btn-primary" type="submit" value="수정">
                     <button type="button" th:onclick="|location.href='@{|/member/modifyPassword|}'|" class="btn btn-secondary btn-outline">비밀번호 변경</button>
                 </div>
