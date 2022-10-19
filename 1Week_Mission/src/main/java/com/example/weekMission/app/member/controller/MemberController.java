@@ -98,4 +98,16 @@ public class MemberController {
         return "member/findUsername";
     }
 
+    @PreAuthorize("isAnonymous()")
+    @PostMapping("/findUsername")
+    public String findUsername(String email) {
+        String memberUsername = memberService.enrolledEmail(email);
+
+        if (memberUsername == null) {
+            return "redirect:/member/findUsername?errorMsg=" + Ut.url.encode("존재하지 않는 이메일입니다.");
+        }
+
+        return "redirect:/member/findUsername?msg=" + Ut.url.encode("아이디 : " + memberUsername);
+    }
+
 }

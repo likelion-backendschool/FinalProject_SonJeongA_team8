@@ -53,4 +53,14 @@ public class MemberService {
         member.setPassword((passwordEncoder.encode(password)));
         memberRepository.save(member);
     }
+
+    public String enrolledEmail(String email) {
+        Member member = memberRepository.findByEmail(email).orElse(null);
+
+        if(member == null) {
+            return null;
+        }
+
+        return member.getUsername();
+    }
 }
