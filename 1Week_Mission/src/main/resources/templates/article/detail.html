@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}">
+
+<head>
+    <title>글 상세정보</title>
+</head>
+
+<body>
+<main layout:fragment="main">
+    <section>
+        <div class="container">
+            <h1>글 상세정보</h1>
+
+            <div th:text="|번호 : ${article.id}|"></div>
+
+            <div th:text="|제목 : ${article.subject}|"></div>
+
+            <div th:text="|작성자 : ${article.author.username}|"></div>
+
+            <div th:text="|작성날짜 : ${article.createDate}|"></div>
+
+            <div th:text="|수정날짜 : ${article.modifyDate}|"></div>
+
+            <div> 내용 : </div>
+            <div class="toast-ui-viewer">
+                <script type="text/x-template">
+                    [[${article.content}]]
+                </script>
+            </div>
+
+            <div>
+                해시태그 :
+                <th:block th:utext="${article.extra_hashTagLinks}" />
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 mt-2 gap-2">
+            <button type="button" th:onclick="|location.href='@{|/post/${article.id}/modify|}'|" class="btn btn-secondary btn-outline">수정</button>
+            <a onclick="return confirm('정말로 삭제하시겠습니까?')" th:href="@{|/post/${article.id}/delete|}" class="btn btn-secondary btn-outline">삭제</a>
+        </div>
+    </section>
+</main>
+</body>
+</html>
