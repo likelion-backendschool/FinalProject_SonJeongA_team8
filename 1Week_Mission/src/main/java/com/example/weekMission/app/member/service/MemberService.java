@@ -46,6 +46,7 @@ public class MemberService {
     }
 
     public void modify(MemberContext memberContext, Member member, String email, String nickname) {
+
         member.setEmail(email);
         member.setNickname(nickname);
         memberRepository.save(member);
