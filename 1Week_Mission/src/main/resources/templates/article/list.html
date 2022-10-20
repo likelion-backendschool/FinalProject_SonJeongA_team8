@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}">
+
+<head>
+    <title>글 리스트</title>
+</head>
+
+<body>
+<main layout:fragment="main">
+    <section>
+        <div class="container">
+            <h1>글 리스트</h1>
+            <br>
+            <ul>
+                <li th:each="article : ${articles}" class="flex gap-2 items-center">
+
+                    <a th:href="@{|/post/${article.id}|}" class="flex p-2 group">
+                        <span class="badge badge-primary mr-2" th:text="${article.id}"></span>
+
+                        <div class="group-hover:underline group-hover:text-[red]">
+
+                            <span  th:text="|제목 : ${article.subject}|">
+                            </span>
+
+                            <span th:text="|작성자 : ${article.author.username}|">
+                            </span>
+
+                            <span th:text="|수정날짜 : ${article.modifyDate}|">
+                            </span>
+
+                            <span th:text="|내용 : ${article.content}|">
+                            </span>
+
+                        </div>
+                    </a>
+
+                    <th:block th:utext="|태그 : ${article.extra_hashTagLinks}|" />
+
+                </li>
+            </ul>
+        </div>
+        <button type="button" th:onclick="|location.href='@{/post/write}'|" class="btn btn-secondary btn-outline">글 작성</button>
+    </section>
+</main>
+</body>
+</html>
