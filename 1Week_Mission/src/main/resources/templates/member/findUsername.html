@@ -7,53 +7,62 @@
 
 <body>
 <main layout:fragment="main">
-    <section class="section section-join flex-grow flex flex-col items-center justify-center">
+    <section class="section section-login flex-grow flex flex-col items-center justify-center">
 
         <div class="max-w-md w-full px-2 pt-4">
-            <h1 class="font-bold text-lg">아이디 찾기</h1>
+            <h1 class="font-bold text-lg">
+                <i class="fa-solid fa-fingerprint"></i>
+
+                아이디 찾기
+            </h1>
 
             <script>
-                let FindUsername__submitDone = false;
+                let MemberFindUsername__submitDone = false;
 
-                function FindUsername__submit(form) {
-                    if (FindUsername__submitDone) {
+                function MemberFindUsername__submit(form) {
+                    if (MemberFindUsername__submitDone) {
                         return;
                     }
 
                     form.email.value = form.email.value.trim();
 
                     if (form.email.value.length == 0) {
-                        warningModal("이메일을 입력해주세요.");
+                        warningModal("아이디를 입력해주세요.");
                         form.email.focus();
 
                         return;
                     }
 
                     form.submit();
-                    FindUsername__submitDone = true;
+                    MemberFindUsername__submitDone = true;
                 }
             </script>
 
 
             <form th:action method="POST" class="flex flex-col gap-3"
-                  onsubmit="FindUsername__submit(this); return false;">
-
+                  onsubmit="MemberFindUsername__submit(this); return false;">
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text">이메일</span>
                     </label>
-                    <input type="email" id="email" name="email" placeholder="이메일" class="input input-bordered" maxlength="50">
+                    <input autofocus type="email" name="email" placeholder="이메일" class="input input-bordered"
+                           maxlength="50">
                 </div>
 
                 <div class="grid grid-cols-2 mt-2 gap-2">
-                    <input class="btn btn-primary" type="submit" value="아이디 찾기">
-                    <button type="button" th:onclick="|location.href='@{/member/login}'|" class="btn btn-secondary btn-outline">취소</button>
+                    <a href="/member/findPassword" class="btn btn-secondary btn-outline">비밀번호 찾기</a>
+                    <input class="btn btn-primary" type="submit" value="아이디찾기">
+                </div>
+
+                <div class="flex justify-center">
+                    <a href="/member/login" class="btn btn-link">로그인</a>
+                    <a href="/member/join" class="btn btn-link">회원가입</a>
                 </div>
             </form>
         </div>
 
-        </div>
     </section>
+
 </main>
 </body>
 </html>

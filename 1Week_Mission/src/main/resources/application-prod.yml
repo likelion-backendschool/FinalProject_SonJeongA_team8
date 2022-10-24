@@ -18,4 +18,4 @@ logging:
     org.hibernate.type.descriptor.sql: info
 custom:
   site:
-    baseUrl: "https://domain"
+    baseUrl: "https://service-domain"

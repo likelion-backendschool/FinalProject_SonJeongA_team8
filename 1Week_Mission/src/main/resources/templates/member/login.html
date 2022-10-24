@@ -10,7 +10,11 @@
     <section class="section section-login flex-grow flex flex-col items-center justify-center">
 
         <div class="max-w-md w-full px-2 pt-4">
-            <h1 class="font-bold text-lg">로그인</h1>
+            <h1 class="font-bold text-lg">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+
+                로그인
+            </h1>
 
             <script>
                 let MemberLogin__submitDone = false;
@@ -23,17 +27,17 @@
                     form.username.value = form.username.value.trim();
 
                     if (form.username.value.length == 0) {
-                        warningModal("로그인아이디를 입력해주세요.");
+                        warningModal("아이디를 입력해주세요.");
                         form.username.focus();
 
                         return;
                     }
 
-                    form.password.value = form.password.value.trim();
+                    form.content.value = form.content.value.trim();
 
-                    if (form.password.value.length == 0) {
-                        warningModal("로그인비밀번호를 입력해주세요.");
-                        form.password.focus();
+                    if (form.content.value.length == 0) {
+                        warningModal("비밀번호를 입력해주세요.");
+                        form.content.focus();
 
                         return;
                     }
@@ -44,12 +48,14 @@
             </script>
 
 
-            <form th:action method="POST" class="flex flex-col gap-3" onsubmit="MemberLogin__submit(this); return false;">
+            <form th:action method="POST" class="flex flex-col gap-3"
+                  onsubmit="MemberLogin__submit(this); return false;">
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text">아이디</span>
                     </label>
-                    <input autofocus type="text" name="username" placeholder="아이디" class="input input-bordered" maxlength="50">
+                    <input autofocus type="text" name="username" placeholder="아이디" class="input input-bordered"
+                           maxlength="50" th:value="${param.username}">
                 </div>
 
                 <div class="form-control">
@@ -61,18 +67,17 @@
                 </div>
 
                 <div class="grid grid-cols-2 mt-2 gap-2">
-                    <input class="btn btn-primary" type="submit" value="로그인">
                     <a href="/member/join" class="btn btn-secondary btn-outline">가입하기</a>
+                    <input class="btn btn-primary" type="submit" value="로그인">
                 </div>
 
-                <div class="grid grid-cols-2 mt-2 gap-2" style="text-align:center">
-                    <a style="color:blue; text-decoration:underline;" href="/member/findUsername">아이디 찾기</a>
-                    <a style="color:blue; text-decoration:underline;" href="/member/findPassword">비밀번호 찾기</a>
+                <div class="flex justify-center">
+                    <a href="/member/findUsername" class="btn btn-link">아이디찾기</a>
+                    <a href="/member/findPassword" class="btn btn-link">비밀번호 찾기</a>
                 </div>
             </form>
         </div>
 
-        </div>
     </section>
 
 </main>

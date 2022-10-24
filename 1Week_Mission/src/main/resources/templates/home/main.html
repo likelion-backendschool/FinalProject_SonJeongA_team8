@@ -1,51 +1,41 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout/layout.html}">
+<html layout:decorate="~{/layout/layout}">
 
 <head>
     <title>메인</title>
 </head>
 
-<body>
 <main layout:fragment="main">
-    <section layout:fragment="content">
-        메인페이지 입니다.
-        <br>
-        <div class="container" sec:authorize="isAuthenticated()">
-            <div th:text="|${#authentication.principal.username}님 환영합니다.|"></div>
+    <section th:unless="${posts != null && posts.size > 0}"
+             class="section section-post-list flex-grow flex items-center justify-center">
+        <div>
+            <div>글이 존재하지 않습니다.</div>
+            <a href="/post/write" class="block text-link mt-2"><i class="fa-solid fa-pen"></i> 글 작성 하러가기</a>
         </div>
+    </section>
 
-        <br>
+    <section th:if="${posts != null && posts.size > 0}" class="section section-post-list container mx-auto">
 
-        <h1>최신글 목록</h1>
+        <div class="px-2 pt-4">
+            <a th:href="@{/post/list}" class="float-right text-link">
+                더 보기
+                <i class="fa-solid fa-angle-right"></i>
+            </a>
 
-        <ul>
-            <li th:each="article : ${articles}" class="flex gap-2 items-center">
+            <h1 class="font-bold text-lg">
+                <i class="fa-solid fa-rectangle-list"></i>
+                최신 글
+            </h1>
 
-                <a th:href="@{|/post/${article.id}|}" class="flex p-2 group">
-                    <span class="badge badge-primary mr-2" th:text="${article.id}"></span>
-
-                    <div class="group-hover:underline group-hover:text-[red]">
-
-                            <span  th:text="|제목 : ${article.subject}|">
-                            </span>
-
-                        <span th:text="|작성자 : ${article.author.username}|">
-                            </span>
-
-                        <span th:text="|수정날짜 : ${article.modifyDate}|">
-                            </span>
-
-                        <span th:text="|내용 : ${article.content}|">
-                            </span>
-
-                    </div>
-                </a>
-
-                <th:block th:utext="|태그 : ${article.extra_hashTagLinks}|" />
-
-            </li>
-        </ul>
+            <div class="mt-2">
+                <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                    <li th:each="post : ${posts}">
+                        <th:block th:replace="fragment/postListItem :: postListItem" ></th:block>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </section>
 </main>
-</body>
+
 </html>
