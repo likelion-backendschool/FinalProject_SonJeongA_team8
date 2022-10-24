@@ -1,7 +1,10 @@
 package com.ll.exam.eBook.app.base.initData;
 
+import com.ll.exam.eBook.app.cart.service.CartService;
 import com.ll.exam.eBook.app.member.entity.Member;
 import com.ll.exam.eBook.app.member.service.MemberService;
+import com.ll.exam.eBook.app.order.entity.Order;
+import com.ll.exam.eBook.app.order.service.OrderService;
 import com.ll.exam.eBook.app.post.service.PostService;
 import com.ll.exam.eBook.app.product.entity.Product;
 import com.ll.exam.eBook.app.product.service.ProductService;
@@ -9,6 +12,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @Profile({"dev", "test"})
@@ -19,12 +25,29 @@ public class NotProdInitData {
     CommandLineRunner initData(
             MemberService memberService,
             PostService postService,
-            ProductService productService
+            ProductService productService,
+            CartService cartService,
+            OrderService orderService
+
     ) {
         return args -> {
             if (initDataDone) {
                 return;
             }
+
+            class Helper {
+                public Order order(Member member, List<Product> products) {
+                    for (int i = 0; i < products.size(); i++) {
+                        Product product = products.get(i);
+
+                        cartService.addItem(member, product);
+                    }
+
+                    return orderService.createFromCart(member);
+                }
+            }
+
+            Helper helper = new Helper();
 
             initDataDone = true;
 
@@ -69,6 +92,46 @@ public class NotProdInitData {
             Product product3 = productService.create(member1, "상품명3", 50_000, "REACT", "#IT #REACT");
             Product product4 = productService.create(member2, "상품명4", 60_000, "HTML", "#IT #HTML");
 
+            memberService.addCash(member1, 10_000, "충전__무통장입금");
+            memberService.addCash(member1, 20_000, "충전__무통장입금");
+            memberService.addCash(member1, -5_000, "출금__일반");
+            memberService.addCash(member1, 1_000_000, "충전__무통장입금");
+
+            memberService.addCash(member2, 2_000_000, "충전__무통장입금");
+
+            // 1번 주문 : 결제완료
+            Order order1 = helper.order(member1, Arrays.asList(
+                            product1,
+                            product2
+                    )
+            );
+
+            int order1PayPrice = order1.calculatePayPrice();
+            orderService.payByRestCashOnly(order1);
+
+            // 2번 주문 : 결제 후 환불
+            Order order2 = helper.order(member2, Arrays.asList(
+                            product3,
+                            product4
+                    )
+            );
+
+            orderService.payByRestCashOnly(order2);
+
+            orderService.refund(order2);
+
+            // 3번 주문 : 결제 전
+            Order order3 = helper.order(member2, Arrays.asList(
+                            product1,
+                            product2
+                    )
+            );
+
+            cartService.addItem(member1, product1);
+            cartService.addItem(member1, product2);
+
+            cartService.addItem(member2, product3);
+            cartService.addItem(member2, product4);
         };
     }
 }

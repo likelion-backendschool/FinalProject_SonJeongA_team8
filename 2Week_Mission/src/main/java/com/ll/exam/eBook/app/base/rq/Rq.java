@@ -3,7 +3,7 @@ package com.ll.exam.eBook.app.base.rq;
 import com.ll.exam.eBook.app.base.dto.RsData;
 import com.ll.exam.eBook.app.member.entity.Member;
 import com.ll.exam.eBook.app.security.dto.MemberContext;
-import com.ll.exam.eBook.util.Ut;
+import com.ll.exam.eBook.util.Util;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -71,11 +71,11 @@ public class Rq {
     }
 
     public static String urlWithMsg(String url, String msg) {
-        return Ut.url.modifyQueryParam(url, "msg", msgWithTtl(msg));
+        return Util.url.modifyQueryParam(url, "msg", msgWithTtl(msg));
     }
 
     public static String urlWithErrorMsg(String url, String errorMsg) {
-        return Ut.url.modifyQueryParam(url, "errorMsg", msgWithTtl(errorMsg));
+        return Util.url.modifyQueryParam(url, "errorMsg", msgWithTtl(errorMsg));
     }
 
     public static String redirectWithMsg(String url, RsData rsData) {
@@ -87,11 +87,11 @@ public class Rq {
     }
 
     private static String msgWithTtl(String msg) {
-        return Ut.url.encode(msg) + ";ttl=" + new Date().getTime();
+        return Util.url.encode(msg) + ";ttl=" + new Date().getTime();
     }
 
     public String redirectWithErrorMsg(String url, RsData rsData) {
-        url = Ut.url.modifyQueryParam(url, "errorMsg", msgWithTtl(rsData.getMsg()));
+        url = Util.url.modifyQueryParam(url, "errorMsg", msgWithTtl(rsData.getMsg()));
 
         return "redirect:" + url;
     }

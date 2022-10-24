@@ -71,6 +71,13 @@
                 </span>
             </a>
 
+            <a href="/cart/list" class="inline-flex" sec:authorize="isAuthenticated()">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="ml-[2px] hidden lg:block">
+                    장바구니
+                </span>
+            </a>
+
             <a href="/post/write" class="inline-flex">
                 <i class="fa-solid fa-pen"></i>
                 <span class="ml-[2px] hidden lg:block">

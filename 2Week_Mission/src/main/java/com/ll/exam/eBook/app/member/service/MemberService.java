@@ -2,13 +2,17 @@ package com.ll.exam.eBook.app.member.service;
 
 import com.ll.exam.eBook.app.AppConfig;
 import com.ll.exam.eBook.app.base.dto.RsData;
+import com.ll.exam.eBook.app.cash.entity.CashLog;
+import com.ll.exam.eBook.app.cash.service.CashService;
 import com.ll.exam.eBook.app.email.service.EmailService;
 import com.ll.exam.eBook.app.emailVerification.service.EmailVerificationService;
 import com.ll.exam.eBook.app.member.entity.Member;
 import com.ll.exam.eBook.app.member.exception.AlreadyJoinException;
 import com.ll.exam.eBook.app.member.repository.MemberRepository;
 import com.ll.exam.eBook.app.security.dto.MemberContext;
-import com.ll.exam.eBook.util.Ut;
+import com.ll.exam.eBook.util.Util;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -28,6 +32,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final EmailVerificationService emailVerificationService;
     private final EmailService emailService;
+    private final CashService cashService;
 
     @Transactional
     public Member join(String username, String password, String email, String nickname) {
@@ -78,7 +83,7 @@ public class MemberService {
     @Transactional
     public RsData sendTempPasswordToEmail(Member actor) {
         String title = "[" + AppConfig.getSiteName() + "] 임시 패스워드 발송";
-        String tempPassword = Ut.getTempPassword(6);
+        String tempPassword = Util.getTempPassword(6);
         String body = "<h1>임시 패스워드 : " + tempPassword + "</h1>";
         body += "<a href=\"" + AppConfig.getSiteBaseUrl() + "/member/login\" target=\"_blank\">로그인 하러가기</a>";
 
@@ -139,5 +144,35 @@ public class MemberService {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
+    }
+
+    @Transactional
+    public RsData<AddCashRsDataBody> addCash(Member member, long price, String eventType) {
+        CashLog cashLog = cashService.addCash(member, price, eventType);
+
+        long newRestCash = member.getRestCash() + cashLog.getPrice();
+
+        member.setRestCash(newRestCash);
+        memberRepository.save(member);
+
+        return RsData.of(
+                "S-1",
+                "성공",
+
+                new AddCashRsDataBody(cashLog, newRestCash)
+        );
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class AddCashRsDataBody {
+        CashLog cashLog;
+        long newRestCash;
+    }
+
+    public long getRestCash(Member member) {
+        Member foundMember = findByUsername(member.getUsername()).get();
+
+        return foundMember.getRestCash();
     }
 }

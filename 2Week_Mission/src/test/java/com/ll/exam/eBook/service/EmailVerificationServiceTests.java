@@ -5,7 +5,7 @@ import com.ll.exam.eBook.app.base.dto.RsData;
 import com.ll.exam.eBook.app.emailVerification.service.EmailVerificationService;
 import com.ll.exam.eBook.app.member.entity.Member;
 import com.ll.exam.eBook.app.member.service.MemberService;
-import com.ll.exam.eBook.util.Ut;
+import com.ll.exam.eBook.util.Util;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ class EmailVerificationServiceTests {
     void t3() {
         String url = emailVerificationService.genEmailVerificationUrl(1);
 
-        assertThat(Ut.url.isUrl(url)).isTrue();
+        assertThat(Util.url.isUrl(url)).isTrue();
     }
 
     @Test

@@ -68,7 +68,7 @@
                         <option disabled="disabled" selected>- 글 태그 선택 -</option>
                         <option th:each="postKeyword : ${postKeywords}"
                                 th:value="${postKeyword.id}"
-                                th:text="|${postKeyword.content} : 글 ${@ut.nf(postKeyword.extra_postTagsCount)}건|"></option>
+                                th:text="|${postKeyword.content} : 글 ${@util.nf(postKeyword.extra_postTagsCount)}건|"></option>
                     </select>
                 </div>
 

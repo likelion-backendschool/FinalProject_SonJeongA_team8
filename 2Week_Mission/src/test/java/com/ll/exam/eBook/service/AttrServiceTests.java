@@ -1,7 +1,7 @@
 package com.ll.exam.eBook.service;
 
 import com.ll.exam.eBook.app.attr.service.AttrService;
-import com.ll.exam.eBook.util.Ut;
+import com.ll.exam.eBook.util.Util;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ class AttrServiceTests {
     public void t4() {
         attrService.set("member__1__extra__homeTown", "전주", LocalDateTime.now().plusSeconds(1));
 
-        Ut.sleep(1000);
+        Util.sleep(1000);
 
         String member1HomeTown = attrService.get("member__1__extra__homeTown", null);
         assertThat(member1HomeTown).isNull();

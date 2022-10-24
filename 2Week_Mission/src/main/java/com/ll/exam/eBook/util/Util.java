@@ -21,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Component
-public class Ut {
+public class Util {
     @SneakyThrows
     public static void sleep(int millis) {
         Thread.sleep(millis);
@@ -125,7 +125,7 @@ public class Ut {
         public static HttpHeaders httpHeadersOf(String... args) {
             HttpHeaders headers = new HttpHeaders();
 
-            Map<String, String> map = Ut.mapOf(args);
+            Map<String, String> map = Util.mapOf(args);
 
             for (String key : map.keySet()) {
                 String value = map.get(key);
