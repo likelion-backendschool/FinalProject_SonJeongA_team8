@@ -46,8 +46,8 @@
                 <div>
                     <div th:each="orderItem : ${order.orderItems}">
                         <div>
-                            음악 : [[${orderItem.product.subject}]] /
-                            아티스트 : [[${orderItem.product.author.name}]] /
+                            도서 : [[${orderItem.product.subject}]] /
+                            작가명 : [[${orderItem.product.author.name}]] /
                             가격 : [[${orderItem.salePrice}]]
                         </div>
                     </div>
