@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}">
+
+<head>
+    <title>메인</title>
+</head>
+
+<body>
+<main layout:fragment="main">
+    <section layout:fragment="content">
+        메인페이지 입니다.
+        <br>
+        <div class="container" sec:authorize="isAuthenticated()">
+            <div th:text="|${#authentication.principal.username}님 환영합니다.|"></div>
+        </div>
+
+        <br>
+
+        <h1>최신글 목록</h1>
+
+        <ul>
+            <li th:each="article : ${articles}" class="flex gap-2 items-center">
+
+                <a th:href="@{|/post/${article.id}|}" class="flex p-2 group">
+                    <span class="badge badge-primary mr-2" th:text="${article.id}"></span>
+
+                    <div class="group-hover:underline group-hover:text-[red]">
+
+                            <span  th:text="|제목 : ${article.subject}|">
+                            </span>
+
+                        <span th:text="|작성자 : ${article.author.username}|">
+                            </span>
+
+                        <span th:text="|수정날짜 : ${article.modifyDate}|">
+                            </span>
+
+                        <span th:text="|내용 : ${article.content}|">
+                            </span>
+
+                    </div>
+                </a>
+
+                <th:block th:utext="|태그 : ${article.extra_hashTagLinks}|" />
+
+            </li>
+        </ul>
+    </section>
+</main>
+</body>
+</html>
