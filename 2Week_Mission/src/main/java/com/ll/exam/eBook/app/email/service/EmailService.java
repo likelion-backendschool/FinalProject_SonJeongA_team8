@@ -39,7 +39,7 @@ public class EmailService {
 
     private RsData trySend(String email, String title, String body) {
         if (AppConfig.isNotProd() && email.equals("wjddkdy0106@naver.com") == false) {
-
+            return RsData.of("S-0", "메일이 발송되었습니다.");
         }
 
         try {
