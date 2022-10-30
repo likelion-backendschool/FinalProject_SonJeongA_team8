@@ -9,6 +9,7 @@ import com.ll.exam.eBook.app.postkeyword.service.PostKeywordService;
 import com.ll.exam.eBook.app.productTag.entity.ProductTag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,6 +48,7 @@ public class PostTagService {
         });
     }
 
+    @Transactional
     private PostTag savePostTag(Post post, String postKeywordContent) {
         PostKeyword postKeyword = postKeywordService.save(postKeywordContent);
 
