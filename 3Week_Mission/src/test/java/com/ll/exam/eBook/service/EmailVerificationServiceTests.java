@@ -2,7 +2,7 @@ package com.ll.exam.eBook.service;
 
 
 import com.ll.exam.eBook.app.base.dto.RsData;
-import com.ll.exam.eBook.app.emailVerification.service.EmailVerificationService;
+import com.ll.exam.eBook.app.email.service.EmailVerificationService;
 import com.ll.exam.eBook.app.member.entity.Member;
 import com.ll.exam.eBook.app.member.service.MemberService;
 import com.ll.exam.eBook.util.Util;

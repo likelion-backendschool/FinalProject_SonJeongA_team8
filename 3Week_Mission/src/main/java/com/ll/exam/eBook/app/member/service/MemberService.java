@@ -5,7 +5,7 @@ import com.ll.exam.eBook.app.base.dto.RsData;
 import com.ll.exam.eBook.app.cash.entity.CashLog;
 import com.ll.exam.eBook.app.cash.service.CashService;
 import com.ll.exam.eBook.app.email.service.EmailService;
-import com.ll.exam.eBook.app.emailVerification.service.EmailVerificationService;
+import com.ll.exam.eBook.app.email.service.EmailVerificationService;
 import com.ll.exam.eBook.app.member.entity.Member;
 import com.ll.exam.eBook.app.member.entity.emum.AuthLevel;
 import com.ll.exam.eBook.app.member.exception.AlreadyJoinException;

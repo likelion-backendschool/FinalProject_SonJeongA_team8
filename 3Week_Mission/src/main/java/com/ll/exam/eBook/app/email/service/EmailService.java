@@ -4,7 +4,6 @@ import com.ll.exam.eBook.app.AppConfig;
 import com.ll.exam.eBook.app.base.dto.RsData;
 import com.ll.exam.eBook.app.email.entity.SendEmailLog;
 import com.ll.exam.eBook.app.email.repository.SendEmailLogRepository;
-import com.ll.exam.eBook.app.emailSender.service.EmailSenderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
@@ -38,7 +37,7 @@ public class EmailService {
     }
 
     private RsData trySend(String email, String title, String body) {
-        if (AppConfig.isNotProd() && email.equals("jjeong0106@gmail.com") == false) {
+        if (AppConfig.isNotProd() && email.equals("wjddkdy0106@naver.com") == false) {
             return RsData.of("S-0", "메일이 발송되었습니다.");
         }
 

@@ -1,4 +1,4 @@
-package com.ll.exam.eBook.app.emailSender.service;
+package com.ll.exam.eBook.app.email.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;

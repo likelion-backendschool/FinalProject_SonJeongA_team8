@@ -1,4 +1,4 @@
-package com.ll.exam.eBook.app.emailVerification.controller;
+package com.ll.exam.eBook.app.email.controller;
 
 import com.ll.exam.eBook.app.base.dto.RsData;
 import com.ll.exam.eBook.app.base.rq.Rq;

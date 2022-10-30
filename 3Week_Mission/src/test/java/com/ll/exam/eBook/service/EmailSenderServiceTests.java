@@ -1,6 +1,6 @@
 package com.ll.exam.eBook.service;
 
-import com.ll.exam.eBook.app.emailSender.service.EmailSenderService;
+import com.ll.exam.eBook.app.email.service.EmailSenderService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

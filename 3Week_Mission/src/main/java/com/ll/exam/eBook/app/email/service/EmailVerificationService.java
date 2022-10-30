@@ -1,4 +1,4 @@
-package com.ll.exam.eBook.app.emailVerification.service;
+package com.ll.exam.eBook.app.email.service;
 
 import com.ll.exam.eBook.app.AppConfig;
 import com.ll.exam.eBook.app.attr.service.AttrService;
