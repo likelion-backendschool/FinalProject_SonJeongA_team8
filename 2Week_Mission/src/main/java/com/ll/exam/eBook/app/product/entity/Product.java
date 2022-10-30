@@ -1,6 +1,7 @@
 package com.ll.exam.eBook.app.product.entity;
 
 import com.ll.exam.eBook.app.base.entity.BaseEntity;
+import com.ll.exam.eBook.app.cart.entity.CartItem;
 import com.ll.exam.eBook.app.member.entity.Member;
 import com.ll.exam.eBook.app.postkeyword.entity.PostKeyword;
 import com.ll.exam.eBook.app.productTag.entity.ProductTag;
@@ -23,15 +24,11 @@ import static javax.persistence.FetchType.LAZY;
 @SuperBuilder
 @ToString(callSuper = true)
 public class Product extends BaseEntity {
-
     @ManyToOne(fetch = LAZY)
     private Member author;
-
     @ManyToOne(fetch = LAZY)
     private PostKeyword postKeyword;
-
     private String subject;
-
     private int price;
 
     public Product(long id) {
@@ -100,5 +97,19 @@ public class Product extends BaseEntity {
                 })
                 .sorted()
                 .collect(Collectors.joining(" "));
+    }
+
+    public CartItem getExtra_actor_cartItem() {
+        Map<String, Object> extra = getExtra();
+
+        if (extra.containsKey("actor_cartItem") == false) {
+            return null;
+        }
+
+        return (CartItem)extra.get("actor_cartItem");
+    }
+
+    public boolean getExtra_actor_hasInCart() {
+        return getExtra_actor_cartItem() != null;
     }
 }

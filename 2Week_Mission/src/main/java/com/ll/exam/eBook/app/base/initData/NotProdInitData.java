@@ -4,6 +4,7 @@ import com.ll.exam.eBook.app.cart.service.CartService;
 import com.ll.exam.eBook.app.member.entity.Member;
 import com.ll.exam.eBook.app.member.service.MemberService;
 import com.ll.exam.eBook.app.order.entity.Order;
+import com.ll.exam.eBook.app.order.repository.OrderRepository;
 import com.ll.exam.eBook.app.order.service.OrderService;
 import com.ll.exam.eBook.app.post.service.PostService;
 import com.ll.exam.eBook.app.product.entity.Product;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,27 +29,13 @@ public class NotProdInitData {
             PostService postService,
             ProductService productService,
             CartService cartService,
-            OrderService orderService
-
+            OrderService orderService,
+            OrderRepository orderRepository
     ) {
         return args -> {
             if (initDataDone) {
                 return;
             }
-
-            class Helper {
-                public Order order(Member member, List<Product> products) {
-                    for (int i = 0; i < products.size(); i++) {
-                        Product product = products.get(i);
-
-                        cartService.addItem(member, product);
-                    }
-
-                    return orderService.createFromCart(member);
-                }
-            }
-
-            Helper helper = new Helper();
 
             initDataDone = true;
 
@@ -99,7 +87,20 @@ public class NotProdInitData {
 
             memberService.addCash(member2, 2_000_000, "충전__무통장입금");
 
-            // 1번 주문 : 결제완료
+            class Helper {
+                public Order order(Member member, List<Product> products) {
+                    for (int i = 0; i < products.size(); i++) {
+                        Product product = products.get(i);
+
+                        cartService.addItem(member, product);
+                    }
+
+                    return orderService.createFromCart(member);
+                }
+            }
+
+            Helper helper = new Helper();
+
             Order order1 = helper.order(member1, Arrays.asList(
                             product1,
                             product2
@@ -109,7 +110,11 @@ public class NotProdInitData {
             int order1PayPrice = order1.calculatePayPrice();
             orderService.payByRestCashOnly(order1);
 
-            // 2번 주문 : 결제 후 환불
+            // 강제로 order1의 결제날짜를 1시간 전으로 돌린다.
+            // 환불 테스트를 위해서
+            order1.setPayDate(LocalDateTime.now().minusHours(1));
+            orderRepository.save(order1);
+
             Order order2 = helper.order(member2, Arrays.asList(
                             product3,
                             product4
@@ -118,20 +123,28 @@ public class NotProdInitData {
 
             orderService.payByRestCashOnly(order2);
 
-            orderService.refund(order2);
-
-            // 3번 주문 : 결제 전
             Order order3 = helper.order(member2, Arrays.asList(
                             product1,
                             product2
                     )
             );
 
-            cartService.addItem(member1, product1);
-            cartService.addItem(member1, product2);
+            cartService.addItem(member1, product3);
+            cartService.addItem(member1, product4);
 
-            cartService.addItem(member2, product3);
-            cartService.addItem(member2, product4);
+            Order order4 = helper.order(member2, Arrays.asList(
+                            product3,
+                            product4
+                    )
+            );
+
+            orderService.payByRestCashOnly(order4);
+
+            Order order5 = helper.order(member2, Arrays.asList(
+                            product3,
+                            product4
+                    )
+            );
         };
     }
 }

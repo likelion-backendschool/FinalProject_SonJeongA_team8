@@ -2,6 +2,8 @@ package com.ll.exam.eBook.app.order.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ll.exam.eBook.app.base.dto.RsData;
+import com.ll.exam.eBook.app.base.rq.Rq;
 import com.ll.exam.eBook.app.member.entity.Member;
 import com.ll.exam.eBook.app.member.service.MemberService;
 import com.ll.exam.eBook.app.order.entity.Order;
@@ -13,6 +15,7 @@ import com.ll.exam.eBook.app.order.service.OrderService;
 import com.ll.exam.eBook.app.security.dto.MemberContext;
 import com.ll.exam.eBook.util.Util;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +29,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.PostConstruct;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -33,12 +37,10 @@ import java.util.Map;
 @RequestMapping("/order")
 public class OrderController {
     private final OrderService orderService;
-
     private final RestTemplate restTemplate = new RestTemplate();
-
     private final ObjectMapper objectMapper;
-
     private final MemberService memberService;
+    private final Rq rq;
 
     @PostMapping("/{id}/payByRestCashOnly")
     @PreAuthorize("isAuthenticated()")
@@ -53,7 +55,7 @@ public class OrderController {
             throw new ActorCanNotPayOrderException();
         }
 
-        orderService.payByRestCashOnly(order);
+        RsData rsData = orderService.payByRestCashOnly(order);
 
         return "redirect:/order/%d?msg=%s".formatted(order.getId(), Util.url.encode("예치금으로 결제했습니다."));
     }
@@ -61,7 +63,11 @@ public class OrderController {
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public String showDetail(@AuthenticationPrincipal MemberContext memberContext, @PathVariable long id, Model model) {
-        Order order = orderService.findForPrintById(id).get();
+        Order order = orderService.findForPrintById(id).orElse(null);
+
+        if (order == null) {
+            return rq.redirectToBackWithMsg("주문을 찾을 수 없습니다.");
+        }
 
         Member actor = memberContext.getMember();
 
@@ -91,7 +97,8 @@ public class OrderController {
         });
     }
 
-    private final String SECRET_KEY = "test_sk_OAQ92ymxN34bQlywxavrajRKXvdk";
+    @Value("${custom.tossPayments.secretKey}")
+    private String SECRET_KEY;
 
     @RequestMapping("/{id}/success")
     public String confirmPayment(
@@ -137,7 +144,10 @@ public class OrderController {
 
             orderService.payByTossPayments(order, payPriceRestCash);
 
-            return "redirect:/order/%d?msg=%s".formatted(order.getId(), Util.url.encode("결제가 완료되었습니다."));
+            return Rq.redirectWithMsg(
+                    "/order/%d".formatted(order.getId()),
+                    "%d번 주문이 결제처리되었습니다.".formatted(order.getId())
+            );
         } else {
             JsonNode failNode = responseEntity.getBody();
             model.addAttribute("message", failNode.get("message").asText());
@@ -153,13 +163,48 @@ public class OrderController {
         return "order/fail";
     }
 
-    @PostMapping("/makeOrder")
+    @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
-    public String makeOrder(@AuthenticationPrincipal MemberContext memberContext) {
+    public String create(@AuthenticationPrincipal MemberContext memberContext) {
         Member member = memberContext.getMember();
         Order order = orderService.createFromCart(member);
-        String redirect = "redirect:/order/%d".formatted(order.getId()) + "?msg=" + Util.url.encode("%d번 주문이 생성되었습니다.".formatted(order.getId()));
 
-        return redirect;
+        return Rq.redirectWithMsg(
+                "/order/%d".formatted(order.getId()),
+                "%d번 주문이 생성되었습니다.".formatted(order.getId())
+        );
+    }
+
+    @GetMapping("/list")
+    @PreAuthorize("isAuthenticated()")
+    public String showList(Model model) {
+        List<Order> orders = orderService.findAllByBuyerId(rq.getId());
+
+        model.addAttribute("orders", orders);
+        return "order/list";
+    }
+
+    @PostMapping("/{orderId}/cancel")
+    @PreAuthorize("isAuthenticated()")
+    public String cancel(@PathVariable Long orderId) {
+        RsData rsData = orderService.cancel(orderId, rq.getMember());
+
+        if (rsData.isFail()) {
+            return Rq.redirectWithErrorMsg("/order/%d".formatted(orderId), rsData);
+        }
+
+        return Rq.redirectWithMsg("/order/%d".formatted(orderId), rsData);
+    }
+
+    @PostMapping("/{orderId}/refund")
+    @PreAuthorize("isAuthenticated()")
+    public String refund(@PathVariable Long orderId) {
+        RsData rsData = orderService.refund(orderId, rq.getMember());
+
+        if (rsData.isFail()) {
+            return Rq.redirectWithErrorMsg("/order/%d".formatted(orderId), rsData);
+        }
+
+        return Rq.redirectWithMsg("/order/%d".formatted(orderId), rsData);
     }
 }

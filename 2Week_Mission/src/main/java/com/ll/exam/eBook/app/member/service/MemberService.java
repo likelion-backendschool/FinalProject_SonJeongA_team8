@@ -7,6 +7,7 @@ import com.ll.exam.eBook.app.cash.service.CashService;
 import com.ll.exam.eBook.app.email.service.EmailService;
 import com.ll.exam.eBook.app.emailVerification.service.EmailVerificationService;
 import com.ll.exam.eBook.app.member.entity.Member;
+import com.ll.exam.eBook.app.member.entity.emum.AuthLevel;
 import com.ll.exam.eBook.app.member.exception.AlreadyJoinException;
 import com.ll.exam.eBook.app.member.repository.MemberRepository;
 import com.ll.exam.eBook.app.security.dto.MemberContext;
@@ -14,6 +15,7 @@ import com.ll.exam.eBook.util.Util;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +28,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -45,14 +48,22 @@ public class MemberService {
                 .password(passwordEncoder.encode(password))
                 .email(email)
                 .nickname(nickname)
+                .authLevel(AuthLevel.NORMAL)
                 .build();
 
         memberRepository.save(member);
 
-        emailVerificationService.send(member);
+        emailVerificationService.send(member)
+                .addCallback(
+                        sendRsData -> {
+                            // 성공시 처리
+                        },
+                        error -> log.error(error.getMessage())
+                );
 
         return member;
     }
+
 
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
@@ -151,16 +162,18 @@ public class MemberService {
         CashLog cashLog = cashService.addCash(member, price, eventType);
 
         long newRestCash = member.getRestCash() + cashLog.getPrice();
-
         member.setRestCash(newRestCash);
         memberRepository.save(member);
 
         return RsData.of(
                 "S-1",
                 "성공",
-
                 new AddCashRsDataBody(cashLog, newRestCash)
         );
+    }
+
+    public Optional<Member> findById(long id) {
+        return memberRepository.findById(id);
     }
 
     @Data
@@ -171,8 +184,6 @@ public class MemberService {
     }
 
     public long getRestCash(Member member) {
-        Member foundMember = findByUsername(member.getUsername()).get();
-
-        return foundMember.getRestCash();
+        return memberRepository.findById(member.getId()).get().getRestCash();
     }
 }

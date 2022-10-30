@@ -1,7 +1,9 @@
-package com.ll.exam.eBook.app.cart.entity;
+package com.ll.exam.eBook.app.myBook.entity;
+
 
 import com.ll.exam.eBook.app.base.entity.BaseEntity;
 import com.ll.exam.eBook.app.member.entity.Member;
+import com.ll.exam.eBook.app.order.entity.OrderItem;
 import com.ll.exam.eBook.app.product.entity.Product;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,13 +22,16 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @SuperBuilder
 @ToString(callSuper = true)
-public class CartItem extends BaseEntity {
+public class MyBook extends BaseEntity {
     @ManyToOne(fetch = LAZY)
-    private Member buyer;
+    @ToString.Exclude
+    private Member owner;
+
     @ManyToOne(fetch = LAZY)
+    @ToString.Exclude
     private Product product;
 
-    public CartItem(long id) {
-        super(id);
-    }
+    @ManyToOne(fetch = LAZY)
+    @ToString.Exclude
+    private OrderItem orderItem;
 }

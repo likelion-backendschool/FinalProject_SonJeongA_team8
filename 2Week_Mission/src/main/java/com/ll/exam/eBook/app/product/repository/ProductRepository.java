@@ -1,6 +1,5 @@
 package com.ll.exam.eBook.app.product.repository;
 
-
 import com.ll.exam.eBook.app.product.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 

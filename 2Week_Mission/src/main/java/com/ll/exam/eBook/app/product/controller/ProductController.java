@@ -3,7 +3,6 @@ package com.ll.exam.eBook.app.product.controller;
 import com.ll.exam.eBook.app.base.exception.ActorCanNotModifyException;
 import com.ll.exam.eBook.app.base.exception.ActorCanNotRemoveException;
 import com.ll.exam.eBook.app.base.rq.Rq;
-import com.ll.exam.eBook.app.cart.service.CartService;
 import com.ll.exam.eBook.app.member.entity.Member;
 import com.ll.exam.eBook.app.post.entity.Post;
 import com.ll.exam.eBook.app.postkeyword.entity.PostKeyword;
@@ -32,7 +31,6 @@ public class ProductController {
     private final ProductService productService;
     private final PostKeywordService postKeywordService;
     private final Rq rq;
-    private final CartService cartService;
 
     @PreAuthorize("isAuthenticated() and hasAuthority('AUTHOR')")
     @GetMapping("/create")
@@ -51,8 +49,8 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public String detail(@PathVariable Long id, Model model) {
-        Product product = productService.findForPrintById(id).get();
+    public String showDetail(@PathVariable Long id, Model model) {
+        Product product = productService.findForPrintById(id, rq.getMember()).get();
         List<Post> posts = productService.findPostsByProduct(product);
 
         model.addAttribute("product", product);
@@ -62,7 +60,7 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public String list(Model model) {
+    public String showList(Model model) {
         List<Product> products = productService.findAllForPrintByOrderByIdDesc(rq.getMember());
 
         model.addAttribute("products", products);
@@ -73,11 +71,9 @@ public class ProductController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/modify")
     public String showModify(@PathVariable long id, Model model) {
-        Product product = productService.findForPrintById(id).get();
+        Product product = productService.findForPrintById(id, rq.getMember()).get();
 
-        Member actor = rq.getMember();
-
-        if (productService.actorCanModify(actor, product) == false) {
+        if (productService.actorCanModify(rq.getMember(), product) == false) {
             throw new ActorCanNotModifyException();
         }
 
@@ -112,7 +108,7 @@ public class ProductController {
 
         productService.remove(post);
 
-        return Rq.redirectWithMsg("/post/list", "%d번 도서가 삭제되었습니다.".formatted(post.getId()));
+        return Rq.redirectWithMsg("/post/list", "%d번 글이 삭제되었습니다.".formatted(post.getId()));
     }
 
     @GetMapping("/tag/{tagContent}")

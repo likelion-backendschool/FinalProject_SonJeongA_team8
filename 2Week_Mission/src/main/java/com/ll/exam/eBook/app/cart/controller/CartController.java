@@ -1,8 +1,10 @@
 package com.ll.exam.eBook.app.cart.controller;
 
+import com.ll.exam.eBook.app.base.rq.Rq;
 import com.ll.exam.eBook.app.cart.entity.CartItem;
 import com.ll.exam.eBook.app.cart.service.CartService;
 import com.ll.exam.eBook.app.member.entity.Member;
+import com.ll.exam.eBook.app.product.entity.Product;
 import com.ll.exam.eBook.app.security.dto.MemberContext;
 import com.ll.exam.eBook.util.Util;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -22,8 +25,9 @@ import java.util.List;
 @RequestMapping("/cart")
 public class CartController {
     private final CartService cartService;
+    private final Rq rq;
 
-    @GetMapping("/list")
+    @GetMapping("/items")
     @PreAuthorize("isAuthenticated()")
     public String showItems(@AuthenticationPrincipal MemberContext memberContext, Model model) {
         Member buyer = memberContext.getMember();
@@ -32,13 +36,29 @@ public class CartController {
 
         model.addAttribute("items", items);
 
-        return "cart/list";
+        return "cart/items";
+    }
+
+    @PostMapping("/addItem/{productId}")
+    @PreAuthorize("isAuthenticated()")
+    public String addItem(@PathVariable long productId) {
+        cartService.addItem(rq.getMember(), new Product((productId)));
+
+        return rq.redirectToBackWithMsg("장바구니에 추가되었습니다.");
+    }
+
+    @PostMapping("/removeItem/{productId}")
+    @PreAuthorize("isAuthenticated()")
+    public String removeItem(@PathVariable long productId) {
+        cartService.removeItem(rq.getMember(), new Product((productId)));
+
+        return rq.redirectToBackWithMsg("장바구니에서 삭제되었습니다.");
     }
 
     @PostMapping("/removeItems")
     @PreAuthorize("isAuthenticated()")
-    public String removeItems(@AuthenticationPrincipal MemberContext memberContext, String ids) {
-        Member buyer = memberContext.getMember();
+    public String removeItems(String ids) {
+        Member buyer = rq.getMember();
 
         String[] idsArr = ids.split(",");
 
@@ -52,6 +72,6 @@ public class CartController {
                     }
                 });
 
-        return "redirect:/cart/list?msg=" + Util.url.encode("%d건의 품목을 삭제하였습니다.".formatted(idsArr.length));
+        return "redirect:/cart/items?msg=" + Util.url.encode("%d건의 품목을 삭제하였습니다.".formatted(idsArr.length));
     }
 }
