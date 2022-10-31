@@ -1,6 +1,6 @@
 package com.ll.exam.eBook.app.base.dto;
 
-
+import com.ll.exam.eBook.util.Util;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,8 +9,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class RsData<T> {
+
     private String resultCode;
+
     private String msg;
+
     private T data;
 
     public static <T> RsData<T> of(String resultCode, String msg, T data) {
@@ -35,5 +38,13 @@ public class RsData<T> {
 
     public boolean isFail() {
         return isSuccess() == false;
+    }
+
+    public String addMsgToUrl(String url) {
+        if ( isFail() ) {
+            return Util.url.modifyQueryParam(url, "errorMsg", getMsg());
+        }
+
+        return Util.url.modifyQueryParam(url, "msg", getMsg());
     }
 }
