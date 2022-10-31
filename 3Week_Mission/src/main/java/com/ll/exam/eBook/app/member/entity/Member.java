@@ -24,8 +24,10 @@ import java.util.List;
 @SuperBuilder
 @ToString(callSuper = true)
 public class Member extends BaseEntity {
+
     @Column(unique = true)
     private String username;
+
     @JsonIgnore
     private String password;
     private String email;
@@ -59,6 +61,11 @@ public class Member extends BaseEntity {
         // 닉네임을 가지고 있다면 작가의 권한을 가진다.
         if (StringUtils.hasText(nickname)) {
             authorities.add(new SimpleGrantedAuthority("AUTHOR"));
+        }
+
+        // username 이 user3이라면 관리자의 권한을 가진다.
+        if (getUsername().equals("user3")) {
+            authorities.add(new SimpleGrantedAuthority("ADMIN"));
         }
 
         return authorities;

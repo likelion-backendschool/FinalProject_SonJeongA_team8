@@ -64,6 +64,33 @@ public class MemberService {
         return member;
     }
 
+    @Transactional
+    public Member adminJoin(String username, String password, String email, String nickname) {
+        if (memberRepository.findByUsername(username).isPresent()) {
+            throw new AlreadyJoinException();
+        }
+
+        Member member = Member.builder()
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .email(email)
+                .nickname(nickname)
+                .authLevel(AuthLevel.ADMIN)
+                .build();
+
+        memberRepository.save(member);
+
+        emailVerificationService.send(member)
+                .addCallback(
+                        sendRsData -> {
+                            // 성공시 처리
+                        },
+                        error -> log.error(error.getMessage())
+                );
+
+        return member;
+    }
+
 
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
