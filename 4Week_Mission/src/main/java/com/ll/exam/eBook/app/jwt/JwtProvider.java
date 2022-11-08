@@ -10,7 +10,7 @@ import javax.crypto.SecretKey;
 public class JwtProvider {
     private final SecretKey jwtSecretKey;
 
-    public SecretKey getSecretKey() {
+    private SecretKey getSecretKey() {
         return jwtSecretKey;
     }
 }
