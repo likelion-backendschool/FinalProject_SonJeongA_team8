@@ -1,6 +1,5 @@
 package com.ll.exam.eBook.app.order.entity;
 
-
 import com.ll.exam.eBook.app.base.entity.BaseEntity;
 import com.ll.exam.eBook.app.product.entity.Product;
 import lombok.Getter;

@@ -1,5 +1,6 @@
 package com.ll.exam.eBook.app.product.entity;
 
+import com.ll.exam.eBook.app.AppConfig;
 import com.ll.exam.eBook.app.base.entity.BaseEntity;
 import com.ll.exam.eBook.app.cart.entity.CartItem;
 import com.ll.exam.eBook.app.member.entity.Member;
@@ -24,8 +25,10 @@ import static javax.persistence.FetchType.LAZY;
 @SuperBuilder
 @ToString(callSuper = true)
 public class Product extends BaseEntity {
+
     @ManyToOne(fetch = LAZY)
     private Member author;
+
     @ManyToOne(fetch = LAZY)
     private PostKeyword postKeyword;
     private String subject;
@@ -40,7 +43,7 @@ public class Product extends BaseEntity {
     }
 
     public int getWholesalePrice() {
-        return (int) Math.ceil(getPrice() * 0.4);
+        return (int) Math.ceil(getPrice() * AppConfig.getWholesalePriceRate());
     }
 
     public boolean isOrderable() {

@@ -1,6 +1,5 @@
 package com.ll.exam.eBook.app.order.entity;
 
-
 import com.ll.exam.eBook.app.base.entity.BaseEntity;
 import com.ll.exam.eBook.app.member.entity.Member;
 import lombok.*;
@@ -49,13 +48,10 @@ public class Order extends BaseEntity {
     }
 
     public int calculatePayPrice() {
-        int payPrice = 0;
-
-        for (OrderItem orderItem : orderItems) {
-            payPrice += orderItem.getSalePrice();
-        }
-
-        return payPrice;
+        return orderItems
+                .stream()
+                .mapToInt(orderItem -> orderItem.getSalePrice())
+                .sum();
     }
 
     public void setCancelDone() {
@@ -85,19 +81,17 @@ public class Order extends BaseEntity {
     }
 
     public int getPayPrice() {
-        int payPrice = 0;
-        for (OrderItem orderItem : orderItems) {
-            payPrice += orderItem.getPayPrice();
-        }
-
-        return payPrice;
+        return orderItems
+                .stream()
+                .mapToInt(orderItem -> orderItem.getPayPrice())
+                .sum();
     }
 
     public void makeName() {
         String name = orderItems.get(0).getProduct().getSubject();
 
         if (orderItems.size() > 1) {
-            name += " 외 %d곡".formatted(orderItems.size() - 1);
+            name += " 외 %d권".formatted(orderItems.size() - 1);
         }
 
         this.name = name;

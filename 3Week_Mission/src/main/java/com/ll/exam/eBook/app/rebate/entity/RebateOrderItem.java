@@ -1,6 +1,5 @@
 package com.ll.exam.eBook.app.rebate.entity;
 
-
 import com.ll.exam.eBook.app.base.entity.BaseEntity;
 import com.ll.exam.eBook.app.cash.entity.CashLog;
 import com.ll.exam.eBook.app.member.entity.Member;
@@ -108,7 +107,7 @@ public class RebateOrderItem extends BaseEntity {
             return 0;
         }
 
-        return payPrice - pgFee - wholesalePrice;
+        return wholesalePrice - pgFee;
     }
 
     public boolean isRebateAvailable() {
@@ -122,5 +121,9 @@ public class RebateOrderItem extends BaseEntity {
     public void setRebateDone(long cashLogId) {
         rebateDate = LocalDateTime.now();
         this.rebateCashLog = new CashLog(cashLogId);
+    }
+
+    public boolean isRebateDone() {
+        return rebateDate != null;
     }
 }

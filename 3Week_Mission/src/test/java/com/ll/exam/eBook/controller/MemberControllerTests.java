@@ -160,6 +160,4 @@ public class MemberControllerTests {
                 .andExpect(model().attributeExists("actorRestCash"))
                 .andExpect(content().string(containsString("마이페이지")));
     }
-
-
 }

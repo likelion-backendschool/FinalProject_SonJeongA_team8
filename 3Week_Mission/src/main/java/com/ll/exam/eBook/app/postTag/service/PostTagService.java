@@ -9,7 +9,6 @@ import com.ll.exam.eBook.app.postkeyword.service.PostKeywordService;
 import com.ll.exam.eBook.app.productTag.entity.ProductTag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,13 +32,12 @@ public class PostTagService {
 
         List<PostTag> needToDelete = new ArrayList<>();
 
-        for (PostTag oldPostTag : oldPostTags) {
-            boolean contains = postKeywordContents.stream().anyMatch(s -> s.equals(oldPostTag.getPostKeyword().getContent()));
-
-            if (contains == false) {
-                needToDelete.add(oldPostTag);
-            }
-        }
+        oldPostTags
+                .stream()
+                .filter(oldPostTag -> !postKeywordContents
+                        .stream()
+                        .anyMatch(s -> s.equals(oldPostTag.getPostKeyword().getContent())))
+                .forEach(oldPostTag -> needToDelete.add(oldPostTag));
 
         needToDelete.forEach(postTag -> postTagRepository.delete(postTag));
 
@@ -48,7 +46,6 @@ public class PostTagService {
         });
     }
 
-    @Transactional
     private PostTag savePostTag(Post post, String postKeywordContent) {
         PostKeyword postKeyword = postKeywordService.save(postKeywordContent);
 

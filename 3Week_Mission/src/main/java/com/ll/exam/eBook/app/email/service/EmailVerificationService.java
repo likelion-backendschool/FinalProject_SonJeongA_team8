@@ -3,7 +3,6 @@ package com.ll.exam.eBook.app.email.service;
 import com.ll.exam.eBook.app.AppConfig;
 import com.ll.exam.eBook.app.attr.service.AttrService;
 import com.ll.exam.eBook.app.base.dto.RsData;
-import com.ll.exam.eBook.app.email.service.EmailService;
 import com.ll.exam.eBook.app.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;

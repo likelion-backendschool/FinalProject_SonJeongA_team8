@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/adm")
 public class AdmHomeController {
-
     @GetMapping("")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String showIndex() {

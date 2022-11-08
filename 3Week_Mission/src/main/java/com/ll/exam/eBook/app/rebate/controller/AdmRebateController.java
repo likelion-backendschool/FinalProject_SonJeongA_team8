@@ -1,6 +1,7 @@
 package com.ll.exam.eBook.app.rebate.controller;
 
 import com.ll.exam.eBook.app.base.dto.RsData;
+import com.ll.exam.eBook.app.base.rq.Rq;
 import com.ll.exam.eBook.app.rebate.entity.RebateOrderItem;
 import com.ll.exam.eBook.app.rebate.service.RebateService;
 import com.ll.exam.eBook.util.Util;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +38,7 @@ public class AdmRebateController {
     public String makeData(String yearMonth) {
         RsData makeDateRsData = rebateService.makeDate(yearMonth);
 
-        String redirect = makeDateRsData.addMsgToUrl("redirect:/adm/rebate/rebateOrderItemList?yearMonth=" + yearMonth);
+        String redirect = Rq.redirectWithMsg("/adm/rebate/rebateOrderItemList?yearMonth=" + yearMonth, makeDateRsData);
 
         return redirect;
     }
@@ -44,12 +46,13 @@ public class AdmRebateController {
     @GetMapping("/rebateOrderItemList")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String showRebateOrderItemList(String yearMonth, Model model) {
-        if (yearMonth == null) {
-            yearMonth = "2022-10";
+        if (StringUtils.hasText(yearMonth) == false) {
+            yearMonth = "2022-11";
         }
 
         List<RebateOrderItem> items = rebateService.findRebateOrderItemsByPayDateIn(yearMonth);
 
+        model.addAttribute("yearMonth", yearMonth);
         model.addAttribute("items", items);
 
         return "adm/rebate/rebateOrderItemList";
@@ -61,14 +64,9 @@ public class AdmRebateController {
         RsData rebateRsData = rebateService.rebate(orderItemId);
 
         String referer = req.getHeader("Referer");
-
         String yearMonth = Util.url.getQueryParamValue(referer, "yearMonth", "");
 
-        String redirect = "redirect:/adm/rebate/rebateOrderItemList?yearMonth=" + yearMonth;
-
-        redirect = rebateRsData.addMsgToUrl(redirect);
-
-        return redirect;
+        return Rq.redirectWithMsg("/adm/rebate/rebateOrderItemList?yearMonth=" + yearMonth, rebateRsData);
     }
 
     @PostMapping("/rebate")
@@ -92,3 +90,5 @@ public class AdmRebateController {
         return redirect;
     }
 }
+
+

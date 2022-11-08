@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -49,33 +48,6 @@ public class MemberService {
                 .email(email)
                 .nickname(nickname)
                 .authLevel(AuthLevel.NORMAL)
-                .build();
-
-        memberRepository.save(member);
-
-        emailVerificationService.send(member)
-                .addCallback(
-                        sendRsData -> {
-                            // 성공시 처리
-                        },
-                        error -> log.error(error.getMessage())
-                );
-
-        return member;
-    }
-
-    @Transactional
-    public Member adminJoin(String username, String password, String email, String nickname) {
-        if (memberRepository.findByUsername(username).isPresent()) {
-            throw new AlreadyJoinException();
-        }
-
-        Member member = Member.builder()
-                .username(username)
-                .password(passwordEncoder.encode(password))
-                .email(email)
-                .nickname(nickname)
-                .authLevel(AuthLevel.ADMIN)
                 .build();
 
         memberRepository.save(member);
@@ -188,7 +160,7 @@ public class MemberService {
     public RsData<AddCashRsDataBody> addCash(Member member, long price, String eventType) {
         CashLog cashLog = cashService.addCash(member, price, eventType);
 
-        long newRestCash = member.getRestCash() + cashLog.getPrice();
+        long newRestCash = getRestCash(member) + cashLog.getPrice();
         member.setRestCash(newRestCash);
         memberRepository.save(member);
 

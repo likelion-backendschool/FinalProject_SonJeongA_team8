@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout/layout.html}">
+<html layout:decorate="~{layout/usrLayout.html}">
 
 <head>
     <title>도서 정보</title>
@@ -25,7 +25,7 @@
                     <div th:text="${product.author.name}"></div>
                 </div>
 
-                <div th:text="|￦ ${@util.nf(product.salePrice)}|"></div>
+                <div th:text="|￦ ${@ut.nf(product.salePrice)}|"></div>
 
                 <div class="flex flex-wrap gap-3">
                     <div class="flex flex-wrap gap-3">
