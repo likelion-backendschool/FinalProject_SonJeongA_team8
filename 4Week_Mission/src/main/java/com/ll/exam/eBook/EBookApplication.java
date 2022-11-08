@@ -23,5 +23,4 @@ public class EBookApplication {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
