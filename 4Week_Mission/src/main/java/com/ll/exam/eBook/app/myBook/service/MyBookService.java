@@ -1,18 +1,26 @@
 package com.ll.exam.eBook.app.myBook.service;
 
 import com.ll.exam.eBook.app.base.dto.RsData;
+import com.ll.exam.eBook.app.myBook.dto.BookChapterDto;
 import com.ll.exam.eBook.app.myBook.entity.MyBook;
 import com.ll.exam.eBook.app.myBook.repository.MyBookRepository;
 import com.ll.exam.eBook.app.order.entity.Order;
+import com.ll.exam.eBook.app.post.service.PostService;
+import com.ll.exam.eBook.app.postTag.entity.PostTag;
+import com.ll.exam.eBook.app.product.entity.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MyBookService {
     private final MyBookRepository myBookRepository;
+    private final PostService postService;
 
     @Transactional
     public RsData add(Order order) {
@@ -35,5 +43,25 @@ public class MyBookService {
                 .forEach(orderItem -> myBookRepository.deleteByProductIdAndOwnerId(orderItem.getProduct().getId(), order.getBuyer().getId()));
 
         return RsData.of("S-1", "나의 책장에서 제거되었습니다.");
+    }
+
+    public List<MyBook> findAllByOwnerId(long ownerId) {
+        return myBookRepository.findAllByOwnerId(ownerId);
+    }
+
+    public MyBook findByIdAndOwnerId(long myBookId, long ownerId) {
+        return myBookRepository.findByIdAndOwnerId(myBookId, ownerId).orElseThrow(MyBookNotFoundException::new);
+    }
+
+    public List<BookChapterDto> getBookChapters(MyBook myBook) {
+        Product product = myBook.getProduct();
+
+        List<PostTag> postTags = postService.getPostTags(product.getAuthor(), product.getPostKeyword().getContent());
+
+        return postTags
+                .stream()
+                .map(postTag -> postTag.getPost())
+                .map(post -> BookChapterDto.of(post))
+                .collect(Collectors.toList());
     }
 }
