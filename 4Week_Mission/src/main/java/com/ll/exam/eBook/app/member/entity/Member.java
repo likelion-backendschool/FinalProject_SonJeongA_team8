@@ -15,7 +15,6 @@ import javax.persistence.Convert;
 import javax.persistence.Entity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -39,12 +38,46 @@ public class Member extends BaseEntity {
     @Convert(converter = AuthLevel.Converter.class)
     private AuthLevel authLevel;
 
+    @Column(columnDefinition = "TEXT")
+    private String accessToken;
+
+    public static Member fromMap(Map<String, Object> map) {
+        return fromJwtClaims(map);
+    }
+
     public static Member fromJwtClaims(Map<String, Object> jwtClaims) {
-        long id = (long)(int)jwtClaims.get("id");
-        LocalDateTime createDate = Util.date.bitsToLocalDateTime((List<Integer>)jwtClaims.get("createDate"));
-        LocalDateTime modifyDate = Util.date.bitsToLocalDateTime((List<Integer>)jwtClaims.get("modifyDate"));
-        String username = (String)jwtClaims.get("username");
-        String email = (String)jwtClaims.get("email");
+        long id = 0;
+
+        if (jwtClaims.get("id") instanceof Long) {
+            id = (long) jwtClaims.get("id");
+        } else if (jwtClaims.get("id") instanceof Integer) {
+            id = (long) (int) jwtClaims.get("id");
+        }
+
+        LocalDateTime createDate = null;
+        LocalDateTime modifyDate = null;
+
+
+        if (jwtClaims.get("createDate") instanceof LocalDateTime) {
+            createDate = (LocalDateTime) jwtClaims.get("createDate");
+        }
+        else if (jwtClaims.get("createDate") instanceof List) {
+            createDate = Util.date.bitsToLocalDateTime((List<Integer>) jwtClaims.get("createDate"));
+        }
+
+        if (jwtClaims.get("modifyDate") instanceof LocalDateTime) {
+            modifyDate = (LocalDateTime) jwtClaims.get("modifyDate");
+        }
+        else if (jwtClaims.get("modifyDate") instanceof List) {
+            modifyDate = Util.date.bitsToLocalDateTime((List<Integer>) jwtClaims.get("modifyDate"));
+        }
+
+        String username = (String) jwtClaims.get("username");
+        String email = (String) jwtClaims.get("email");
+        boolean emailVerified = (boolean) jwtClaims.get("emailVerified");
+        AuthLevel authLevel = (AuthLevel) jwtClaims.get("authLevel");
+        String accessToken = (String) jwtClaims.get("accessToken");
+        String nickname = (String) jwtClaims.get("nickname");
 
         return Member
                 .builder()
@@ -53,6 +86,10 @@ public class Member extends BaseEntity {
                 .modifyDate(modifyDate)
                 .username(username)
                 .email(email)
+                .emailVerified(emailVerified)
+                .authLevel(authLevel)
+                .accessToken(accessToken)
+                .nickname(nickname)
                 .build();
     }
 
@@ -72,7 +109,6 @@ public class Member extends BaseEntity {
         return "member__" + getId();
     }
 
-
     public List<GrantedAuthority> genAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("MEMBER"));
@@ -89,15 +125,7 @@ public class Member extends BaseEntity {
         return authorities;
     }
 
-
-    // 현재 회원이 가지고 있는 권한들을 List<GrantedAuthority> 형태로 리턴
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("MEMBER"));
-
-        return authorities;
-    }
-
+    @JsonIgnore
     public Map<String, Object> getAccessTokenClaims() {
         return Util.mapOf(
                 "id", getId(),
@@ -105,8 +133,26 @@ public class Member extends BaseEntity {
                 "modifyDate", getModifyDate(),
                 "username", getUsername(),
                 "email", getEmail(),
+                "emailVerified", isEmailVerified(),
+                "nickname", getNickname(),
                 "authLevel", getAuthLevel(),
-                "authorities", getAuthorities()
+                "authorities", genAuthorities()
+        );
+    }
+
+    @JsonIgnore
+    public Map<String, Object> toMap() {
+        return Util.mapOf(
+                "id", getId(),
+                "createDate", getCreateDate(),
+                "modifyDate", getModifyDate(),
+                "username", getUsername(),
+                "email", getEmail(),
+                "emailVerified", isEmailVerified(),
+                "nickname", getNickname(),
+                "authLevel", getAuthLevel(),
+                "authorities", genAuthorities(),
+                "accessToken", getAccessToken()
         );
     }
 }

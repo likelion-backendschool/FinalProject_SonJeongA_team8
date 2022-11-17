@@ -8,10 +8,12 @@ import javax.validation.constraints.NotEmpty;
 public class JoinForm {
     @NotEmpty
     private String username;
+
     @NotEmpty
     private String password;
+
     @NotEmpty
     private String email;
-    private String nickname;
 
+    private String nickname;
 }
