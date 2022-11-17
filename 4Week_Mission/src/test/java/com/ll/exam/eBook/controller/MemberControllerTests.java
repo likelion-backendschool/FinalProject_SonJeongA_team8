@@ -163,26 +163,4 @@ public class MemberControllerTests {
                 .andExpect(model().attributeExists("actorRestCash"))
                 .andExpect(content().string(containsString("마이페이지")));
     }
-
-    @Test
-    @DisplayName("POST /api/v1/member/login 은 로그인 처리 URL 이다.")
-    void t8() throws Exception {
-        // When
-        ResultActions resultActions = mvc
-                .perform(
-                        post("/api/v1/member/login")
-                                .content("""
-                                        {
-                                            "username": "user1",
-                                            "password": "1234"
-                                        }
-                                        """.stripIndent())
-                                .contentType(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
-                )
-                .andDo(print());
-
-        // Then
-        resultActions
-                .andExpect(status().is2xxSuccessful());
-    }
 }
