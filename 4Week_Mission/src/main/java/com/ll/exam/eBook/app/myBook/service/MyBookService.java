@@ -3,6 +3,7 @@ package com.ll.exam.eBook.app.myBook.service;
 import com.ll.exam.eBook.app.base.dto.RsData;
 import com.ll.exam.eBook.app.myBook.dto.BookChapterDto;
 import com.ll.exam.eBook.app.myBook.entity.MyBook;
+import com.ll.exam.eBook.app.myBook.exception.MyBookNotFoundException;
 import com.ll.exam.eBook.app.myBook.repository.MyBookRepository;
 import com.ll.exam.eBook.app.order.entity.Order;
 import com.ll.exam.eBook.app.post.service.PostService;
