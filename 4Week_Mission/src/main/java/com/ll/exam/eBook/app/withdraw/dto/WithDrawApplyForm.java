@@ -9,8 +9,10 @@ import javax.validation.constraints.NotNull;
 public class WithDrawApplyForm {
     @NotBlank
     private String bankName;
+
     @NotBlank
     private String bankAccountNo;
+
     @NotNull
     private Integer price;
 }
