@@ -2,17 +2,11 @@ package com.ll.exam.eBook.app.member.controller;
 
 import com.ll.exam.eBook.app.base.dto.RsData;
 import com.ll.exam.eBook.app.base.rq.Rq;
-import com.ll.exam.eBook.app.login.dto.request.LoginDto;
 import com.ll.exam.eBook.app.member.entity.Member;
 import com.ll.exam.eBook.app.member.form.JoinForm;
 import com.ll.exam.eBook.app.member.service.MemberService;
-import com.ll.exam.eBook.util.Util;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +22,6 @@ import javax.validation.Valid;
 public class MemberController {
     private final MemberService memberService;
     private final Rq rq;
-    private final PasswordEncoder passwordEncoder;
 
     @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
