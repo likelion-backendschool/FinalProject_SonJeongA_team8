@@ -9,8 +9,10 @@ import javax.validation.constraints.NotNull;
 public class ProductModifyForm {
     @NotBlank
     private String subject;
+
     @NotNull
     private int price;
+
     @NotBlank
     private String productTagContents;
 }

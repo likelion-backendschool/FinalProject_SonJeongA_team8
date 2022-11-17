@@ -9,10 +9,13 @@ import javax.validation.constraints.NotNull;
 public class ProductForm {
     @NotBlank
     private String subject;
+
     @NotNull
     private int price;
+
     @NotNull
     private Long postKeywordId;
+
     @NotBlank
     private String productTagContents;
 }
