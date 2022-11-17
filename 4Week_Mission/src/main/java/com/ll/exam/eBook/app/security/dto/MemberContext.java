@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
-@JsonIncludeProperties({"id", "createDate", "modifyDate", "username", "email", "authorities"})
 public class MemberContext extends User {
     private final Long id;
     private final LocalDateTime createDate;
@@ -24,7 +23,7 @@ public class MemberContext extends User {
     private final AuthLevel authLevel;
 
     public MemberContext(Member member, List<GrantedAuthority> authorities) {
-        super(member.getUsername(), member.getPassword(), authorities);
+        super(member.getUsername(), member.getPassword() != null ? member.getPassword() : "", authorities);
         this.id = member.getId();
         this.createDate = member.getCreateDate();
         this.modifyDate = member.getModifyDate();

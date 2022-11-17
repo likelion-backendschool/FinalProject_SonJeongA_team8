@@ -1,6 +1,7 @@
 package com.ll.exam.eBook.app.security.filter;
 
 import com.ll.exam.eBook.app.member.entity.Member;
+import com.ll.exam.eBook.app.member.service.MemberService;
 import com.ll.exam.eBook.app.security.dto.MemberContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
+    private final MemberService memberService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -30,11 +32,16 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if (bearerToken != null) {
             String token = bearerToken.substring("Bearer ".length());
 
+            // 1차 체크(정보가 변조되지 않았는지 체크)
             if (jwtProvider.verify(token)) {
                 Map<String, Object> claims = jwtProvider.getClaims(token);
+                // 캐시(레디스)를 통해서
+                Member member = memberService.getByUsername__cached((String) claims.get("username"));
 
-                Member member = Member.fromJwtClaims(claims);
-                forceAuthentication(member);
+                // 2차 체크(화이트리스트에 포함되는지)
+                if (memberService.verifyWithWhiteList(member, token)) {
+                    forceAuthentication(member);
+                }
             }
         }
 
@@ -47,8 +54,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken authentication =
                 UsernamePasswordAuthenticationToken.authenticated(
                         memberContext,
-                        member.getPassword(),
-                        memberContext.getAuthorities()
+                        null,
+                        member.genAuthorities()
                 );
 
         SecurityContext context = SecurityContextHolder.createEmptyContext();
