@@ -2,15 +2,21 @@ package com.ll.exam.eBook.app.myBook.controller;
 
 import com.ll.exam.eBook.app.base.dto.RsData;
 import com.ll.exam.eBook.app.base.rq.Rq;
+import com.ll.exam.eBook.app.myBook.dto.*;
+import com.ll.exam.eBook.app.myBook.entity.MyBook;
 import com.ll.exam.eBook.app.myBook.service.MyBookService;
 import com.ll.exam.eBook.util.Util;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -47,7 +53,7 @@ public class ApiV1MyBooksController {
         MyBook myBook = myBookService.findByIdAndOwnerId(myBookId, rq.getId());
         List<BookChapterDto> bookChapters = myBookService.getBookChapters(myBook);
 
-        return Ut.sp.responseEntityOf(
+        return Util.sp.responseEntityOf(
                 RsData.successOf(
                         MyBookResponse.builder()
                                 .myBook(MyBookDetailDto.of(myBook, bookChapters))
