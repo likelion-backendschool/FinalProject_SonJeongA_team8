@@ -1,5 +1,6 @@
 package com.ll.exam.eBook.app.security.dto;
 
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.ll.exam.eBook.app.member.entity.Member;
 import com.ll.exam.eBook.app.member.entity.emum.AuthLevel;
 import lombok.Getter;
@@ -8,8 +9,11 @@ import org.springframework.security.core.userdetails.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
+@JsonIncludeProperties({"id", "createDate", "modifyDate", "username", "email", "authorities"})
 public class MemberContext extends User {
     private final Long id;
     private final LocalDateTime createDate;

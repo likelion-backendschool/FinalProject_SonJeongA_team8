@@ -98,3 +98,4 @@ public class AttrService {
         } else return value.equals("1");
     }
 }
+
