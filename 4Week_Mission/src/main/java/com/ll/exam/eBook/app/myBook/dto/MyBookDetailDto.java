@@ -1,6 +1,7 @@
 package com.ll.exam.eBook.app.myBook.dto;
 
 import com.ll.exam.eBook.app.myBook.entity.MyBook;
+import com.ll.exam.eBook.app.product.dto.ProductDetailDto;
 import lombok.Builder;
 import lombok.Getter;
 

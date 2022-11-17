@@ -12,6 +12,7 @@ import com.ll.exam.eBook.app.member.entity.emum.AuthLevel;
 import com.ll.exam.eBook.app.member.exception.AlreadyJoinException;
 import com.ll.exam.eBook.app.member.repository.MemberRepository;
 import com.ll.exam.eBook.app.security.dto.MemberContext;
+import com.ll.exam.eBook.app.security.jwt.JwtProvider;
 import com.ll.exam.eBook.util.Util;
 import lombok.AllArgsConstructor;
 import lombok.Data;

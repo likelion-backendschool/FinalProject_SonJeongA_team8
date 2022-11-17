@@ -3,6 +3,7 @@ package com.ll.exam.eBook.app.security.filter;
 import com.ll.exam.eBook.app.member.entity.Member;
 import com.ll.exam.eBook.app.member.service.MemberService;
 import com.ll.exam.eBook.app.security.dto.MemberContext;
+import com.ll.exam.eBook.app.security.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
